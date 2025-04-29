@@ -1,30 +1,25 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import styles from './style';
+import React from "react";
+import { View,Text, Button, ScrollView, StyleSheet,TouchableOpacity } from "react-native";
 
-interface Avatar {
-        id: number;
-        imageUrl: string;
+import { useNavigation } from "@react-navigation/native";
+
+export default function SelectionScreen (){
+    const navigation = useNavigation();
+
+    return(
+            <View style={styles.container}>
+                    <Button title="SingIn" onPress={() => navigation.navigate("SingIn")}></Button>
+                    <Button title="SingUp" onPress={() => navigation.navigate("SingUp")}></Button>
+                    <Button title="SingUp" onPress={() => navigation.navigate("SingUp")}></Button>
+                    <Button title="Select" onPress={() => navigation.navigate("avatarSelect")}></Button>
+            </View>
+    )
 }
 
-const AvatarSelectionScreen: React.FC = () => {
-        const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
-
-        const avatars: Avatar[] = [
-                {id: 1, imageUrl: '../assets/imgs/avatar.png'},
-                {id: 2, imageUrl: '../assets/imgs/avatar.png'},
-                {id: 3, imageUrl: '../assets/imgs/avatar.png'},
-                {id: 4, imageUrl: '../assets/imgs/avatar.png'},
-                {id: 5, imageUrl: '../assets/imgs/avatar.png'},
-        ];
-
-        const handleAvatarPress = (id: number) => {
-                setSelectedAvatarId(id);
-        };
-
-        const handleConfirmSelection = () => {
-                if (selectedAvatarId) {
-                        console.log('Avatar')
-                }
-        }
-}
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });

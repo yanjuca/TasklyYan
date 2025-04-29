@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SingIn from "./src/pages/singin";
 import SingUp from "./src/pages/singUp";
 import SelectionScreen from "./src/pages/selectionScreen";
+import avatarSelect from "./src/pages/avatarSelect";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,7 @@ export default function app(){
         <Stack.Screen name="SelectionScreen" component={SelectionScreen}/>
         <Stack.Screen name="SingIn" component={SingIn}/>
         <Stack.Screen name="SingUp" component={SingUp}/>
+        <Stack.Screen name="avatarSelect" component={avatarSelect}/>
         
       </Stack.Navigator>
     </NavigationContainer>
