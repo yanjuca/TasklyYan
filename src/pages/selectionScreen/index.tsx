@@ -18,7 +18,12 @@ export default function SelectionScreen (){
 const styles = StyleSheet.create({
     container: {
       flex: 1,
+<<<<<<< HEAD
       justifyContent: 'center',
       alignItems: 'center',     
+=======
+      justifyContent: 'center',  
+      alignItems: 'center',      
+>>>>>>> feature/tela-cadastro
     },
   });

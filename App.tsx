@@ -14,9 +14,15 @@ export default function app(){
     <NavigationContainer>
       <Stack.Navigator>
 
+<<<<<<< HEAD
         <Stack.Screen name="SelectionScreen" component={SelectionScreen}/>
         <Stack.Screen name="SingIn" component={SingIn}/>
         <Stack.Screen name="SingUp" component={SingUp}/>
+=======
+        <Stack.Screen name="SelectionScreen" component={SelectionScreen} options={{headerShown:false}}/>
+        <Stack.Screen name="SingIn" component={SingIn} options={{headerShown:false}}/>
+        <Stack.Screen name="SingUp" component={SingUp} options={{headerShown:false}}/>
+>>>>>>> feature/tela-cadastro
         
       </Stack.Navigator>
     </NavigationContainer>
