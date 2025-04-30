@@ -10,7 +10,6 @@ export default function SelectionScreen (){
             <View style={styles.container}>                
                     <Button title="SingIn" onPress={() => navigation.navigate("SingIn")}></Button>
                     <Button title="SingUp" onPress={() => navigation.navigate("SingUp")}></Button>
-                    <Button title="SingUp" onPress={() => navigation.navigate("SingUp")}></Button>
                     <Button title="SplashScreen" onPress={() => navigation.navigate("SplashScreen")}></Button>
             </View>        
     )

@@ -1,8 +1,15 @@
-import React from "react";
+import React , {useState} from "react";
 import { View,Text, TextInput, TouchableOpacity } from "react-native";
 import { styles } from "./style";
+import ModalBiometrics from "../../components/common/modalBiometrics"
 
 export default function SingUp (){
+
+    const [ isModalVisible, setIsmodalVisible] = useState(false)
+    const openModal = () => setIsmodalVisible(true)
+    const closeModal = () => setIsmodalVisible(false)
+
+
     return(
         <View style={styles.container}>
             <View style={styles.cont}>
@@ -28,8 +35,9 @@ export default function SingUp (){
                 <TextInput style={styles.txtinput} placeholder="* * * * * * * *"></TextInput>
                 <Text style={styles.txterro}>Erro aqui</Text>
                 
-                <TouchableOpacity style={styles.btn}>
+                <TouchableOpacity style={styles.btn} onPress={openModal}>
                     <Text style={styles.txtbtn}> CRIAR CONTA</Text>
+                    <ModalBiometrics visible={isModalVisible} onClose={closeModal} />
                 </TouchableOpacity>
 
             </View> 
