@@ -11,16 +11,16 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontSize: 20,
+        fontSize: 26,
         fontWeight: 700,
-        color: '#333',
+        color: '#000',
         textAlign: 'center',
         fontFamily: 'Roboto',
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: 400,
-        color: '#333',
+        color: '#000',
         textAlign: 'center',
         fontFamily: 'Roboto',
     },
@@ -32,34 +32,31 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     avatarButton: {
-        margin: 10,
+        margin: 5,
         borderRadius: 50,
         overflow: 'hidden',
-        borderWidth: 2,
-        backgroundColor: '#000'
-    },
-    selectedAvatar: {
-        borderColor: '#5B3CC4',
+        borderWidth: 3,
+        backgroundColor: '#000',
     },
     avatarImage: {
-        width: 80,
-        height: 80,
+        width: 90,
+        height: 90,
         borderRadius: 40,
     },
     deselectedAvatarImage: {
-        opacity: 0.5,
+        opacity: 0.4,
     },
     confirmButton: {
         backgroundColor: '#5B3CC4',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
+        paddingVertical: 11,
+        paddingHorizontal: 70,
         borderRadius: 8,
     },
     confirmButtonText: {
         color: '#fff',
-        fontSize: 16,
-        fontWeight: 600,
-        fontFamily: 'Roboto'
+        fontSize: 20,
+        fontWeight: 700,
+        fontFamily: 'Roboto',
     },
 });
 
