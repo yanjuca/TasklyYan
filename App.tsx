@@ -3,7 +3,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import SingIn from "./src/pages/singIn";
+import SingIn from "./src/pages/singin";
 import SingUp from "./src/pages/singUp";
 import SelectionScreen from "./src/pages/selectionScreen";
 
