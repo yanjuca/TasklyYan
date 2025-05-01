@@ -1,17 +1,54 @@
-import React from "react";
-import { View,Text, Button } from "react-native";
+import React from 'react';
+import { Text, View, Image, TextInput,KeyboardAvoidingView,TouchableOpacity,
+  StyleSheet, Platform,Checkbox } from 'react-native';
 
-import { useNavigation } from "@react-navigation/native";
+ import { styles } from './style';
 
-export default function SingIn (){
-    const navigation = useNavigation();
+export default function App() {
+  return (
+    <KeyboardAvoidingView
 
-    return(
-        <View>
-            <Text>
-                tela login
-                <Button title="SingUp"></Button>
-            </Text>
-        </View>
-    )
+      style={styles.background}
+    >
+      <View style={styles.containerLogo}>
+        <Image
+          source={require('../../assets/imgs/frame1.png')}
+          style={styles.logoImage}
+        />
+      </View>
+
+      <View style={styles.container}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite seu email"
+          autoCorrect={false}
+          onChangeText={() => {}}
+        />
+       <Text style={styles.error}>Erro aqui</Text>
+
+        <Text style={styles.label}>Senha</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Digite sua senha"
+          secureTextEntry
+          autoCorrect={false}
+          onChangeText={() => {}}
+        />
+        <Text style={styles.error}>Erro aqui</Text>
+
+
+<Text style={styles.namecheck}> Lembrar de mim</Text>
+
+        <TouchableOpacity style={styles.buttonEntrar}>
+          <Text style={styles.textButtonWhite}>ENTRAR</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.buttonCriar}>
+          <Text style={styles.textButtonPurple}>CRIAR CONTA</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
+  );
 }
+
