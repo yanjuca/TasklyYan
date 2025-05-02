@@ -3,6 +3,8 @@ import { View,Text, TextInput, TouchableOpacity } from "react-native";
 import { styles } from "./style";
 import ModalBiometrics from "../../components/common/modalBiometrics"
 
+
+
 export default function SingUp (){
 
     const [ isModalVisible, setIsmodalVisible] = useState(false)
@@ -14,6 +16,7 @@ export default function SingUp (){
         <View style={styles.container}>
             <View style={styles.cont}>
                 
+
                 <Text style={styles.txth1}>CADASTRO</Text>
                 <Text>Nome Completo</Text>
                 <TextInput style={styles.txtinput} placeholder="Ex: João Gabriel"></TextInput>

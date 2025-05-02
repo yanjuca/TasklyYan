@@ -1,26 +1,27 @@
-import React from "react"; 
+import React from "react";
 
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import SingIn from "./src/pages/singin";
-import SingUp from "./src/pages/singUp";
-import SelectionScreen from "./src/pages/selectionScreen";
-import SplashScreen from "./src/pages/splashscreen";
+import SingUp from "./src/pages/signUp";
+import SingIn from "./src/pages/signIn";
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-export default function app(){
-  return(
-    <NavigationContainer>
-      <Stack.Navigator>
 
-        <Stack.Screen name="SelectionScreen" component={SelectionScreen}/>
-        <Stack.Screen name="SingIn" component={SingIn}/>
-        <Stack.Screen name="SingUp" component={SingUp}/>
-        <Stack.Screen name="SplashScreen" component={SplashScreen}/>
-        
-      </Stack.Navigator>
-    </NavigationContainer>
-  )
+export default function Routes(){
+    return(
+        <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen 
+              name="SingUp"
+              component={SingUp}
+            />
+            <Tab.Screen 
+              name="SingIn"
+              component={SingIn}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+    )
 }
