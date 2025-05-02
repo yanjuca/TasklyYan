@@ -7,12 +7,11 @@ export default function SelectionScreen (){
     const navigation = useNavigation();
 
     return(
-            <View style={styles.container}>
+            <View style={styles.container}>                
                     <Button title="SingIn" onPress={() => navigation.navigate("SingIn")}></Button>
                     <Button title="SingUp" onPress={() => navigation.navigate("SingUp")}></Button>
-                    <Button title="SingUp" onPress={() => navigation.navigate("SingUp")}></Button>
-                    <Button title="Select" onPress={() => navigation.navigate("avatarSelect")}></Button>
-            </View>
+                    <Button title="SplashScreen" onPress={() => navigation.navigate("SplashScreen")}></Button>
+            </View>        
     )
 }
 
@@ -20,6 +19,6 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       justifyContent: 'center',
-      alignItems: 'center',
+      alignItems: 'center',     
     },
   });
