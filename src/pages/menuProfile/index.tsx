@@ -1,16 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import styles from './style';
+import LogoutConfirmationModal from '../../components/common/LogoutConfirmationModal';
 
 // Ícones
 import UserIcon from '../../assets/icons/profileGuy.png';
 import FingerprintIcon from '../../assets/icons/fingerprint.png';
 import LogoutIcon from '../../assets/icons/logout.png';
 import ChevronRightIcon from '../../assets/icons/ChevronRight.png';
+import DeleteAccIcon from '../../assets/icons/recyclebin.png'
 
 import ProfileImage from '../../assets/imgs/avatar.png';
 
 const ProfileScreen: React.FC = () => {
+
+    const [ismodalLogoutVisible, setIsModalLogoutVisible] = useState(false);
+
+    const handleLogoutPress = () => {
+        setIsModalLogoutVisible(true);
+    };
+
+    const handleCancelLogout = () => {
+        setIsModalLogoutVisible(false);
+    };
+
+    const handleConfirmLogout = () => {
+        //IMPLEMENTAR LÓGICA DO LOGOUT dependente do banco de dados
+        console.log('Usuário saiu da conta!');
+        setIsModalLogoutVisible(false);
+    };
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -40,10 +58,16 @@ const ProfileScreen: React.FC = () => {
                         <Image source={FingerprintIcon} style={styles.actionIcon} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleLogoutPress}>
                     <View style={styles.actionContent}>
                         <Text style={styles.actionText}>Sair da Conta</Text>
                         <Image source={LogoutIcon} style={styles.actionIcon} />
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.actionButton}>
+                    <View style={styles.actionContent}>
+                        <Text style={styles.actionText}>Excluir Conta</Text>
+                        <Image source={DeleteAccIcon} style={styles.actionIcon} />
                     </View>
                 </TouchableOpacity>
             </ScrollView>
@@ -56,6 +80,14 @@ const ProfileScreen: React.FC = () => {
                 <Text style={styles.menuText}>Termos e regulamentos</Text>
                 <Image source={ChevronRightIcon} style={styles.menuIcon} />
             </TouchableOpacity>
+
+            {ismodalLogoutVisible && (
+                <LogoutConfirmationModal
+                    visible={ismodalLogoutVisible}
+                    onCancel={handleCancelLogout}
+                    onConfirm={handleConfirmLogout}
+                />
+            )}
         </View>
     );
 };
