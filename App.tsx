@@ -8,7 +8,9 @@ import SingUp from "./src/pages/singUp";
 import SelectionScreen from "./src/pages/selectionScreen";
 import avatarSelect from "./src/pages/avatarSelect";
 import SplashScreen from "./src/pages/splashscreen";
+
 import menuProfile from "./src/pages/menuProfile";
+  import profileEdit from "./src/pages/profileEdit";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +25,7 @@ export default function app(){
         <Stack.Screen name="avatarSelect" component={avatarSelect}/>
         <Stack.Screen name="SplashScreen" component={SplashScreen}/>
         <Stack.Screen name="menuProfile" component={menuProfile}/>
+          <Stack.Screen name="profileEdit" component={profileEdit}/>
         
       </Stack.Navigator>
     </NavigationContainer>

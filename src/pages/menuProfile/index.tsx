@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import styles from './style';
+import { useNavigation } from '@react-navigation/native';
+
+//Modais
 import LogoutConfirmationModal from '../../components/common/LogoutConfirmationModal';
 
 // Ícones
@@ -14,21 +17,28 @@ import ProfileImage from '../../assets/imgs/avatar.png';
 
 const ProfileScreen: React.FC = () => {
 
-    const [ismodalLogoutVisible, setIsModalLogoutVisible] = useState(false);
+    const navigation = useNavigation();
+
+    const [isLogoutConfirmationModalVisible, setIsLogoutConfirmationModalVisible] = useState(false);
+
+    const handleEditProfilePress = () => {
+        navigation.navigate('profileEdit');
+    };
 
     const handleLogoutPress = () => {
-        setIsModalLogoutVisible(true);
+        setIsLogoutConfirmationModalVisible(true);
     };
 
     const handleCancelLogout = () => {
-        setIsModalLogoutVisible(false);
+        setIsLogoutConfirmationModalVisible(false);
     };
 
     const handleConfirmLogout = () => {
-        //IMPLEMENTAR LÓGICA DO LOGOUT dependente do banco de dados
+        //IMPLEMENTAR LÓGICA DO LOGOUT dependente do banco de dados - Yan
         console.log('Usuário saiu da conta!');
-        setIsModalLogoutVisible(false);
+        setIsLogoutConfirmationModalVisible(false);
     };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -46,9 +56,9 @@ const ProfileScreen: React.FC = () => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.actionsContainer}
             >
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleEditProfilePress}>
                     <View style={styles.actionContent}>
-                        <Text style={styles.actionText}>Editar           Informações Pessoais</Text>
+                        <Text style={styles.actionText}>Editar Informações Pessoais</Text>
                         <Image source={UserIcon} style={styles.actionIcon} />
                     </View>
                 </TouchableOpacity>
@@ -81,9 +91,9 @@ const ProfileScreen: React.FC = () => {
                 <Image source={ChevronRightIcon} style={styles.menuIcon} />
             </TouchableOpacity>
 
-            {ismodalLogoutVisible && (
+            {isLogoutConfirmationModalVisible && (
                 <LogoutConfirmationModal
-                    visible={ismodalLogoutVisible}
+                    visible={isLogoutConfirmationModalVisible}
                     onCancel={handleCancelLogout}
                     onConfirm={handleConfirmLogout}
                 />
