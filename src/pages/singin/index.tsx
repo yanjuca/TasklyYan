@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, Image, TextInput,KeyboardAvoidingView,TouchableOpacity,
-  StyleSheet, Platform,Checkbox } from 'react-native';
+  StyleSheet, Platform, Checkbox } from 'react-native';
 
  import { styles } from './style';
 
