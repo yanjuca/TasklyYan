@@ -1,15 +1,20 @@
-import React from 'react';
-import { Text, View, Image, TextInput,KeyboardAvoidingView,TouchableOpacity,
-  StyleSheet, Platform, Checkbox } from 'react-native';
+import React, { useState } from 'react';
+import {
+  Text, View, Image, TextInput,
+  KeyboardAvoidingView, TouchableOpacity
+} from 'react-native';
 
- import { styles } from './style';
+import { styles } from './style';
+import ModalCriarTarefa from '../../components/common/modalcriartarefa'; // <== Adicione isso
 
 export default function App() {
-  return (
-    <KeyboardAvoidingView
+  const [modalVisible, setModalVisible] = useState(false); // <== controle do modal
 
-      style={styles.background}
-    >
+  return (
+    <KeyboardAvoidingView style={styles.background}>
+      {/* Modal visível */}
+      <ModalCriarTarefa visible={modalVisible} onClose={() => setModalVisible(false)} />
+
       <View style={styles.containerLogo}>
         <Image
           source={require('../../assets/imgs/frame1.png')}
@@ -23,9 +28,8 @@ export default function App() {
           style={styles.input}
           placeholder="Digite seu email"
           autoCorrect={false}
-          onChangeText={() => {}}
         />
-       <Text style={styles.error}>Erro aqui</Text>
+        <Text style={styles.error}>Erro aqui</Text>
 
         <Text style={styles.label}>Senha</Text>
         <TextInput
@@ -33,14 +37,15 @@ export default function App() {
           placeholder="Digite sua senha"
           secureTextEntry
           autoCorrect={false}
-          onChangeText={() => {}}
         />
         <Text style={styles.error}>Erro aqui</Text>
 
+        <Text style={styles.namecheck}>Lembrar de mim</Text>
 
-<Text style={styles.namecheck}> Lembrar de mim</Text>
-
-        <TouchableOpacity style={styles.buttonEntrar}>
+        <TouchableOpacity
+          style={styles.buttonEntrar}
+          onPress={() => setModalVisible(true)} // <== abre o modal
+        >
           <Text style={styles.textButtonWhite}>ENTRAR</Text>
         </TouchableOpacity>
 
@@ -51,4 +56,3 @@ export default function App() {
     </KeyboardAvoidingView>
   );
 }
-

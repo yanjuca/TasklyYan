@@ -6,7 +6,7 @@ import LogoutConfirmationModal from '../../components/common/LogoutConfirmationM
 // Ícones
 import UserIcon from '../../assets/icons/profileGuy.png';
 import FingerprintIcon from '../../assets/icons/fingerprint.png';
-import LogoutIcon from '../../assets/icons/logout.png';
+import LogoutIcon from '../../assets/icons/fingerprint.png';
 import ChevronRightIcon from '../../assets/icons/ChevronRight.png';
 import DeleteAccIcon from '../../assets/icons/recyclebin.png'
 
