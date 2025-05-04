@@ -1,0 +1,82 @@
+import React, { useState } from "react";
+import { View, Text, Image, TouchableOpacity} from "react-native";
+import { styles } from "./styles";
+export default function HomePageContent(){
+
+    const [checked, setChecked] = useState(false);
+    const [selectedTask, setSelectedTask] = useState(null);
+
+    const toggleCheck = (taskId) => {
+        setSelectedTask(prev => prev === taskId ? null : taskId);
+      };
+          
+
+    return(
+        <View style={styles.container}>
+
+            <View style={styles.cont}>
+                <View style={styles.header}>
+                    <Text style={styles.txtTitle}>Taskly</Text>
+                    <Image source={require('../../assets/imgs/avatar.png')} style={{ width: 50, height: 50 }} ></Image>
+                </View>
+
+                <View style={styles.content}>
+                    <View style={styles.conticon}>
+                        <Image style={styles.icon} source={require('../../assets/icons/Vector.png')}></Image>
+                   </View>
+                   
+                    <View style={styles.task}>
+                        <View style={styles.tasktitle}>
+                            <Text style={styles.txtTi}>Bater o ponto</Text>
+                            
+                            <TouchableOpacity
+                                style={styles.checkContainer}
+                                onPress={() => toggleCheck(1)}
+                                    >
+                                {selectedTask === 1 && <Text style={styles.checkMark}>✓</Text>}
+                            </TouchableOpacity>
+                            
+                        </View>
+                        <Text style={styles.txt}>bater o ponto pelo site do kairos e depois tenho que sair para tomar café.</Text>
+                        <View style={styles.contSpan}>
+                            <Text style={styles.span}>TRABALHO</Text>
+                            <Text style={styles.span}>CASA</Text>
+                            <Text style={styles.span}>ESPORTE</Text>
+                            <Text style={styles.span}>ACADEMIA</Text>
+                            <Text style={styles.span}>LAZER</Text>
+                        </View>
+                        <TouchableOpacity style={styles.btn}><Text style={styles.txtbtn}>VER DETALHES</Text></TouchableOpacity>
+                    </View>
+
+                    <View style={styles.task}>
+                    <View style={styles.tasktitle}>
+                            <Text style={styles.txtTi}>Jogar vôlei</Text>
+                            <TouchableOpacity
+                                style={styles.checkContainer}
+                                onPress={() => toggleCheck(2)}
+                                >
+                                {selectedTask === 2 && <Text style={styles.checkMark}>✓</Text>}
+                            </TouchableOpacity>
+                        </View>
+                        <Text style={styles.txt}>Marcar pelada com o pessoal do CT.</Text>
+                        <View style={styles.contSpan}>
+                            <Text style={styles.span}>TRABALHO</Text>
+                            <Text style={styles.span}>CASA</Text>
+                            <Text style={styles.span}>ESPORTE</Text>
+                            <Text style={styles.span}>ACADEMIA</Text>
+                            <Text style={styles.span}>LAZER</Text>
+                        </View>
+                        <TouchableOpacity style={styles.btn}><Text style={styles.txtbtn}>VER DETALHES</Text></TouchableOpacity>
+                  
+                    </View>
+                </View>
+                <View>
+
+                </View>
+                <TouchableOpacity style={styles.criar}>
+                    <Text style={styles.txtcriar}>Criar Tarefa</Text>
+                </TouchableOpacity>
+            </View>
+        </View>
+    )
+}

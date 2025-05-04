@@ -10,6 +10,7 @@ import avatarSelect from "../pages/avatarSelect";
 import SplashScreen from "../pages/splashscreen";
 import menuProfile from "../pages/menuProfile";
 import Tab from "../routes/index"
+import HomePageContent from "../pages/homePageContent";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ export default function StackRouter(){
         <Stack.Screen name="avatarSelect" component={avatarSelect} options={{headerShown:false}}/>
         <Stack.Screen name="SplashScreen" component={SplashScreen} options={{headerShown:false}}/>
         <Stack.Screen name="menuProfile" component={menuProfile} options={{headerShown:false}}/>
+        <Stack.Screen name="HomePageContent" component={HomePageContent} options={{headerShown:false}}/>
       </Stack.Navigator>    
   )
 }
