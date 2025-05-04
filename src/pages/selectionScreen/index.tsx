@@ -13,6 +13,7 @@ export default function SelectionScreen (){
                     <Button title="avatarSelect" onPress={() => navigation.navigate("avatarSelect")}></Button>
                     <Button title="SplashScreen" onPress={() => navigation.navigate("SplashScreen")}></Button>
                     <Button title="menuProfile" onPress={() => navigation.navigate("menuProfile")}></Button>
+                    <Button title="HomePageContent" onPress={() => navigation.navigate("HomePageContent")}></Button>
             </View>        
     )
 }
