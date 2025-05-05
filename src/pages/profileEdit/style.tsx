@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 30,
     justifyContent: 'space-between',
+    paddingHorizontal: 10,
   },
   backButton: {
     flexDirection: 'row',
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     fontWeight: 'medium',
     fontSize: 18,
   },
-  title: {
+  titleHead: {
     fontSize: 16,
     fontWeight: 'medium',
     color: '#000000',
@@ -39,15 +40,16 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   label: {
-    fontSize: 16,
-    color: '#424242',
+    fontSize: 12,
+    color: '#1E1E1E',
+    fontWeight: 'regular',
     marginBottom: 5,
   },
   input: {
     borderWidth: 2,
     borderColor: '#5B3CC4',
     borderRadius: 8,
-    padding: 15,
+    padding: 12,
     marginBottom: 15,
     backgroundColor: '#FFFFFF',
     fontSize: 16,
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: '#E63946',
-    fontSize: 14,
+    fontSize: 12,
     marginBottom: 10,
   },
   continueButton: {

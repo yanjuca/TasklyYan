@@ -118,14 +118,16 @@ const ProfileScreen: React.FC = () => {
                 </TouchableOpacity>
             </ScrollView>
 
-            <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuText}>Preferências</Text>
-                <Image source={ChevronRightIcon} style={styles.menuIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuText}>Termos e regulamentos</Text>
-                <Image source={ChevronRightIcon} style={styles.menuIcon} />
-            </TouchableOpacity>
+            <View style={styles.menuContainer}>
+                <TouchableOpacity style={styles.menuItem}>
+                    <Text style={styles.menuText}>Preferências</Text>
+                    <Image source={ChevronRightIcon} style={styles.menuIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem}>
+                    <Text style={styles.menuText}>Termos e regulamentos</Text>
+                    <Image source={ChevronRightIcon} style={styles.menuIcon} />
+                </TouchableOpacity>
+            </View>
 
             {isLogoutConfirmationModalVisible && (
                 <LogoutConfirmationModal
