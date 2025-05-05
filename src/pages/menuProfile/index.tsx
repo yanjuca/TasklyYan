@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import styles from './style';
+import { useNavigation } from '@react-navigation/native';
+
 import LogoutConfirmationModal from '../../components/common/LogoutConfirmationModal';
 
 // Ícones
@@ -15,6 +17,12 @@ import ProfileImage from '../../assets/imgs/avatar.png';
 const ProfileScreen: React.FC = () => {
 
     const [ismodalLogoutVisible, setIsModalLogoutVisible] = useState(false);
+    
+    const navigation = useNavigation();
+
+    const handleTermsAndConditionsPress = () => {
+        navigation.navigate('WebView', { url: 'https://sobreuol.noticias.uol.com.br/normas-de-seguranca-e-privacidade/en/' }); // Substitua pela URL real
+    };
 
     const handleLogoutPress = () => {
         setIsModalLogoutVisible(true);
@@ -76,7 +84,7 @@ const ProfileScreen: React.FC = () => {
                 <Text style={styles.menuText}>Preferências</Text>
                 <Image source={ChevronRightIcon} style={styles.menuIcon} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity style={styles.menuItem} onPress={handleTermsAndConditionsPress}>
                 <Text style={styles.menuText}>Termos e regulamentos</Text>
                 <Image source={ChevronRightIcon} style={styles.menuIcon} />
             </TouchableOpacity>
