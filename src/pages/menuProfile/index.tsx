@@ -5,6 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 
 //Modais
 import LogoutConfirmationModal from '../../components/common/LogoutConfirmationModal';
+import ToggleBiometricsModal from '../../components/common/ToggleBiometricsModal'; // Importe o modal de biometria
+import AccountDeletionModal from '../../components/common/AccountDeletionModal'; // Importe o modal de exclusão de conta
 
 // Ícones
 import UserIcon from '../../assets/icons/profileGuy.png';
@@ -20,6 +22,9 @@ const ProfileScreen: React.FC = () => {
     const navigation = useNavigation();
 
     const [isLogoutConfirmationModalVisible, setIsLogoutConfirmationModalVisible] = useState(false);
+    const [isBiometricModalVisible, setIsBiometricModalVisible] = useState(false);
+    const [isBiometricEnabled, setIsBiometricEnabled] = useState(false); // Estado da biometria
+    const [isAccountDeletionModalVisible, setIsAccountDeletionModalVisible] = useState(false); // Estado do modal de exclusão de conta
 
     const handleEditProfilePress = () => {
         navigation.navigate('profileEdit');
@@ -37,6 +42,37 @@ const ProfileScreen: React.FC = () => {
         //IMPLEMENTAR LÓGICA DO LOGOUT dependente do banco de dados - Yan
         console.log('Usuário saiu da conta!');
         setIsLogoutConfirmationModalVisible(false);
+    };
+
+    const handleOpenBiometricModal = () => {
+        setIsBiometricModalVisible(true);
+    };
+
+    const handleCloseBiometricModal = () => {
+        setIsBiometricModalVisible(false);
+    };
+
+    const handleConfirmBiometricChange = (newState: boolean) => {
+        // IMPLEMENTAR A LÓGICA PARA ATIVAR/DESATIVAR A BIOMETRIA
+        console.log('Biometria alterada para:', newState);
+        setIsBiometricEnabled(newState);
+        setIsBiometricModalVisible(false);
+        // Aqui você também precisará salvar a preferência do usuário (ex: AsyncStorage)
+    };
+
+    const handleOpenDeleteAccountModal = () => {
+        setIsAccountDeletionModalVisible(true);
+    };
+
+    const handleCloseDeleteAccountModal = () => {
+        setIsAccountDeletionModalVisible(false);
+    };
+
+    const handleConfirmDeleteAccount = () => {
+        // IMPLEMENTAR A LÓGICA PARA DELETAR A CONTA (dependente do seu backend)
+        console.log('Conta deletada!');
+        setIsAccountDeletionModalVisible(false);
+        // Navegar para a tela de login ou outra tela apropriada após a exclusão
     };
 
     return (
@@ -62,7 +98,7 @@ const ProfileScreen: React.FC = () => {
                         <Image source={UserIcon} style={styles.actionIcon} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleOpenBiometricModal}>
                     <View style={styles.actionContent}>
                         <Text style={styles.actionText}>Mudar Biometria</Text>
                         <Image source={FingerprintIcon} style={styles.actionIcon} />
@@ -74,7 +110,7 @@ const ProfileScreen: React.FC = () => {
                         <Image source={LogoutIcon} style={styles.actionIcon} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleOpenDeleteAccountModal}>
                     <View style={styles.actionContent}>
                         <Text style={styles.actionText}>Excluir Conta</Text>
                         <Image source={DeleteAccIcon} style={styles.actionIcon} />
@@ -93,9 +129,26 @@ const ProfileScreen: React.FC = () => {
 
             {isLogoutConfirmationModalVisible && (
                 <LogoutConfirmationModal
-                    visible={isLogoutConfirmationModalVisible}
+                    isVisible={isLogoutConfirmationModalVisible}
                     onCancel={handleCancelLogout}
                     onConfirm={handleConfirmLogout}
+                />
+            )}
+
+            {isBiometricModalVisible && (
+                <ToggleBiometricsModal
+                    isVisible={isBiometricModalVisible}
+                    isBiometricEnabled={isBiometricEnabled}
+                    onCancel={handleCloseBiometricModal}
+                    onConfirm={handleConfirmBiometricChange}
+                />
+            )}
+
+            {isAccountDeletionModalVisible && (
+                <AccountDeletionModal
+                    isVisible={isAccountDeletionModalVisible}
+                    onCancel={handleCloseDeleteAccountModal}
+                    onConfirm={handleConfirmDeleteAccount}
                 />
             )}
         </View>
