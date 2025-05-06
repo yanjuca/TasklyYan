@@ -5,16 +5,12 @@ import {
 } from 'react-native';
 
 import { styles } from './style';
-import ModalCriarTarefa from '../../components/common/modalcriartarefa'; // <== Adicione isso
 
 export default function App() {
-  const [modalVisible, setModalVisible] = useState(false); // <== controle do modal
+  const [rememberMe, setRememberMe] = useState(false);
 
   return (
     <KeyboardAvoidingView style={styles.background}>
-      {/* Modal visível */}
-      <ModalCriarTarefa visible={modalVisible} onClose={() => setModalVisible(false)} />
-
       <View style={styles.containerLogo}>
         <Image
           source={require('../../assets/imgs/frame1.png')}
@@ -40,12 +36,22 @@ export default function App() {
         />
         <Text style={styles.error}>Erro aqui</Text>
 
-        <Text style={styles.namecheck}>Lembrar de mim</Text>
+        {/* Checkbox personalizado */}
+        <View style={styles.checkboxContainer}>
+          <TouchableOpacity
+            onPress={() => setRememberMe(!rememberMe)}
+            style={[
+              styles.checkbox,
+            ]}
+          >
+            {rememberMe && (
+              <Text style={styles.checkboxCheckmark}>✓</Text>
+            )}
+          </TouchableOpacity>
+          <Text style={styles.namecheck}>Lembrar de mim</Text>
+        </View>
 
-        <TouchableOpacity
-          style={styles.buttonEntrar}
-          onPress={() => setModalVisible(true)} // <== abre o modal
-        >
+        <TouchableOpacity style={styles.buttonEntrar}>
           <Text style={styles.textButtonWhite}>ENTRAR</Text>
         </TouchableOpacity>
 

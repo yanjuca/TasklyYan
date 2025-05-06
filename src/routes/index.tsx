@@ -8,6 +8,7 @@ import SingIn from "../pages/signIn";
 import Avatar from "../pages/avatarSelect";
 import { Image } from "react-native";
 
+
 const Tab = createBottomTabNavigator();
 
 
