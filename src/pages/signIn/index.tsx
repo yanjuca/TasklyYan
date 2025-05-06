@@ -6,14 +6,11 @@ import {
 
 import { styles } from './style';
 
-
 export default function App() {
-  
+  const [rememberMe, setRememberMe] = useState(false);
+
   return (
     <KeyboardAvoidingView style={styles.background}>
-      {/* Modal visível */}
-      
-
       <View style={styles.containerLogo}>
         <Image
           source={require('../../assets/imgs/frame1.png')}
@@ -39,11 +36,22 @@ export default function App() {
         />
         <Text style={styles.error}>Erro aqui</Text>
 
-        <Text style={styles.namecheck}>Lembrar de mim</Text>
+        {/* Checkbox personalizado */}
+        <View style={styles.checkboxContainer}>
+          <TouchableOpacity
+            onPress={() => setRememberMe(!rememberMe)}
+            style={[
+              styles.checkbox,
+            ]}
+          >
+            {rememberMe && (
+              <Text style={styles.checkboxCheckmark}>✓</Text>
+            )}
+          </TouchableOpacity>
+          <Text style={styles.namecheck}>Lembrar de mim</Text>
+        </View>
 
-        <TouchableOpacity
-          style={styles.buttonEntrar}
-        >
+        <TouchableOpacity style={styles.buttonEntrar}>
           <Text style={styles.textButtonWhite}>ENTRAR</Text>
         </TouchableOpacity>
 
