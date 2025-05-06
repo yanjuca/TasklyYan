@@ -5,15 +5,14 @@ import {
 } from 'react-native';
 
 import { styles } from './style';
-import ModalCriarTarefa from '../../components/common/modalcriartarefa'; // <== Adicione isso
+
 
 export default function App() {
-  const [modalVisible, setModalVisible] = useState(false); // <== controle do modal
-
+  
   return (
     <KeyboardAvoidingView style={styles.background}>
       {/* Modal visível */}
-      <ModalCriarTarefa visible={modalVisible} onClose={() => setModalVisible(false)} />
+      
 
       <View style={styles.containerLogo}>
         <Image
@@ -44,7 +43,6 @@ export default function App() {
 
         <TouchableOpacity
           style={styles.buttonEntrar}
-          onPress={() => setModalVisible(true)} // <== abre o modal
         >
           <Text style={styles.textButtonWhite}>ENTRAR</Text>
         </TouchableOpacity>
