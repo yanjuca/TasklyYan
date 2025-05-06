@@ -5,8 +5,8 @@ import { useNavigation } from '@react-navigation/native';
 
 //Modais
 import LogoutConfirmationModal from '../../components/common/LogoutConfirmationModal';
-import ToggleBiometricsModal from '../../components/common/ToggleBiometricsModal'; // Importe o modal de biometria
-import AccountDeletionModal from '../../components/common/AccountDeletionModal'; // Importe o modal de exclusão de conta
+import ToggleBiometricsModal from '../../components/common/ToggleBiometricsModal';
+import AccountDeletionModal from '../../components/common/AccountDeletionModal';
 
 // Ícones
 import UserIcon from '../../assets/icons/profileGuy.png';
@@ -19,12 +19,16 @@ import ProfileImage from '../../assets/imgs/avatar.png';
 
 const ProfileScreen: React.FC = () => {
 
+    
     const navigation = useNavigation();
+
+    const handleTermsAndConditionsPress = () => {
+        navigation.navigate('WebView', { url: 'https://sobreuol.noticias.uol.com.br/normas-de-seguranca-e-privacidade/en/' });
 
     const [isLogoutConfirmationModalVisible, setIsLogoutConfirmationModalVisible] = useState(false);
     const [isBiometricModalVisible, setIsBiometricModalVisible] = useState(false);
-    const [isBiometricEnabled, setIsBiometricEnabled] = useState(false); // Estado da biometria
-    const [isAccountDeletionModalVisible, setIsAccountDeletionModalVisible] = useState(false); // Estado do modal de exclusão de conta
+    const [isBiometricEnabled, setIsBiometricEnabled] = useState(false);
+    const [isAccountDeletionModalVisible, setIsAccountDeletionModalVisible] = useState(false);
 
     const handleEditProfilePress = () => {
         navigation.navigate('profileEdit');
@@ -39,7 +43,6 @@ const ProfileScreen: React.FC = () => {
     };
 
     const handleConfirmLogout = () => {
-        //IMPLEMENTAR LÓGICA DO LOGOUT dependente do banco de dados - Yan
         console.log('Usuário saiu da conta!');
         setIsLogoutConfirmationModalVisible(false);
     };
@@ -53,11 +56,9 @@ const ProfileScreen: React.FC = () => {
     };
 
     const handleConfirmBiometricChange = (newState: boolean) => {
-        // IMPLEMENTAR A LÓGICA PARA ATIVAR/DESATIVAR A BIOMETRIA
         console.log('Biometria alterada para:', newState);
         setIsBiometricEnabled(newState);
         setIsBiometricModalVisible(false);
-        // Aqui você também precisará salvar a preferência do usuário (ex: AsyncStorage)
     };
 
     const handleOpenDeleteAccountModal = () => {
@@ -69,10 +70,8 @@ const ProfileScreen: React.FC = () => {
     };
 
     const handleConfirmDeleteAccount = () => {
-        // IMPLEMENTAR A LÓGICA PARA DELETAR A CONTA (dependente do seu backend)
         console.log('Conta deletada!');
         setIsAccountDeletionModalVisible(false);
-        // Navegar para a tela de login ou outra tela apropriada após a exclusão
     };
 
     return (
@@ -117,16 +116,16 @@ const ProfileScreen: React.FC = () => {
                     </View>
                 </TouchableOpacity>
             </ScrollView>
-
+        
             <View style={styles.menuContainer}>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Text style={styles.menuText}>Preferências</Text>
-                    <Image source={ChevronRightIcon} style={styles.menuIcon} />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.menuItem}>
-                    <Text style={styles.menuText}>Termos e regulamentos</Text>
-                    <Image source={ChevronRightIcon} style={styles.menuIcon} />
-                </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem}>
+                  <Text style={styles.menuText}>Preferências</Text>
+                  <Image source={ChevronRightIcon} style={styles.menuIcon} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem} onPress={handleTermsAndConditionsPress}>
+                  <Text style={styles.menuText}>Termos e regulamentos</Text>
+                  <Image source={ChevronRightIcon} style={styles.menuIcon} />
+              </TouchableOpacity>
             </View>
 
             {isLogoutConfirmationModalVisible && (
