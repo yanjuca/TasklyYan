@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     menuContainer: {
-        marginBottom: 40,
+        marginBottom: 160,
     },
     menuItem: {
         alignSelf: 'center',
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         borderRadius: 12,
         paddingVertical: 25,
         paddingHorizontal: 25,
-        marginBottom: 10,
+        marginBottom: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

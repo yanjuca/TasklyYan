@@ -24,7 +24,7 @@ const ProfileScreen: React.FC = () => {
 
     const handleTermsAndConditionsPress = () => {
         navigation.navigate('WebView', { url: 'https://sobreuol.noticias.uol.com.br/normas-de-seguranca-e-privacidade/en/' });
-
+    };
     const [isLogoutConfirmationModalVisible, setIsLogoutConfirmationModalVisible] = useState(false);
     const [isBiometricModalVisible, setIsBiometricModalVisible] = useState(false);
     const [isBiometricEnabled, setIsBiometricEnabled] = useState(false);
