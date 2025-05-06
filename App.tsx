@@ -7,6 +7,7 @@ import SingIn from "./src/pages/singin";
 import SingUp from "./src/pages/singUp";
 import SelectionScreen from "./src/pages/selectionScreen";
 import SplashScreen from "./src/pages/splashscreen";
+import PreferencesMenu from "./src/pages/preferencesMenu";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,7 @@ export default function app(){
         <Stack.Screen name="SingIn" component={SingIn}/>
         <Stack.Screen name="SingUp" component={SingUp}/>
         <Stack.Screen name="SplashScreen" component={SplashScreen}/>
+        <Stack.Screen name="PreferencesMenu" component={PreferencesMenu}/>
         
       </Stack.Navigator>
     </NavigationContainer>
