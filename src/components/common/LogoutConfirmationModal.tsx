@@ -64,7 +64,7 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
           },
           modalTitle: {
             fontSize: 18,
-            fontWeight: 'medium',
+            fontWeight: 'bold',
             marginBottom: 8,
             color: '#1E1E1E',
           },
@@ -99,7 +99,7 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
           },
           buttonText: {
             color: '#fff',
-            fontWeight: 'bold',
+            fontWeight: 'medium',
             fontSize: 18,
           },
           cancelButtonText: {
