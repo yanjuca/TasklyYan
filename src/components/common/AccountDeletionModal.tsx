@@ -1,6 +1,8 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+
 interface AccountDeletionModalProps {
     isVisible: boolean;
     onCancel: () => void;
@@ -12,6 +14,9 @@ const AccountDeletionModal: React.FC<AccountDeletionModalProps> = ({
     onCancel,
     onConfirm,
 }) => {
+
+    const navigation = useNavigation();
+
     return (
         <Modal
             visible={isVisible}
@@ -36,7 +41,7 @@ const AccountDeletionModal: React.FC<AccountDeletionModalProps> = ({
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.button, styles.confirmButton]}
-                            onPress={onConfirm}
+                            onPress={() => navigation.navigate("SingIn")}
                         >
                             <Text style={styles.buttonText}>EXCLUIR</Text>
                         </TouchableOpacity>

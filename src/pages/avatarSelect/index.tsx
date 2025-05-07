@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './style';
 import AvatarImage from '../../assets/imgs/avatar.png';
 
+import { useNavigation } from '@react-navigation/native';
+
 interface Avatar {
         id: number;
         imageUrl: any;
@@ -27,8 +29,11 @@ const AvatarSelectionScreen: React.FC = () => {
         const handleConfirmSelection = () => {
                 if (selectedAvatarId) {
                         console.log('Avatar selecionado: ', selectedAvatarId);
+                        navigation.navigate("Tab");
                 }
         }
+
+        const navigation = useNavigation();
 
         return (
                 <View style={styles.container}>

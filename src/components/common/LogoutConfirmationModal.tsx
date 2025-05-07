@@ -1,6 +1,8 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
+import { useNavigation } from "@react-navigation/native";
+
 interface LogoutConfirmationModalProps {
     isVisible: boolean;
     onCancel: () => void;
@@ -12,6 +14,9 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
     onCancel,
     onConfirm,
 }) => {
+
+  const navigation = useNavigation();
+
     return (
         <Modal
             visible={isVisible}
@@ -37,7 +42,7 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.button, styles.confirmButton]}
-                            onPress={onConfirm}
+                            onPress={() => navigation.navigate("SingIn")}
                         >
                             <Text style={styles.buttonText}>SAIR</Text>
                         </TouchableOpacity>

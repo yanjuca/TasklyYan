@@ -3,9 +3,8 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import SingUp from "../pages/signUp";
-import SingIn from "../pages/signIn";
-import Avatar from "../pages/avatarSelect";
+import homePage from "../pages/homePage";
+import Menu from "../pages/menuProfile";
 import { Image } from "react-native";
 
 
@@ -17,7 +16,7 @@ export default function Routes(){
           <Tab.Navigator>
             <Tab.Screen 
               name="home"
-              component={SingUp}
+              component={homePage}
               options={{             
                 
                 headerShown:false, 
@@ -35,8 +34,8 @@ export default function Routes(){
               }}
             />
             <Tab.Screen 
-              name="SingIn"
-              component={SingIn}
+              name="Menu"
+              component={Menu}
               options={{       
                 headerShown:false, 
                 tabBarShowLabel: false,        
@@ -54,7 +53,7 @@ export default function Routes(){
             />
             <Tab.Screen 
               name="menu"
-              component={Avatar}
+              component={Menu}
               options={{       
                 headerShown:false, 
                 tabBarShowLabel: false,        

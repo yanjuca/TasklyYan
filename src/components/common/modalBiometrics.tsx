@@ -1,7 +1,14 @@
 import React from 'react';
 import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
+
 const ModalComponent = ({ visible, onClose }) => {
+
+  const navigation = useNavigation();
+
+
   return (
     <Modal
       transparent={true}
@@ -15,7 +22,7 @@ const ModalComponent = ({ visible, onClose }) => {
           <Text style={styles.modalText}>Use sua impressão digital para acessar seu app de tarefas com rapidez e segurança. Se preferir, você ainda poderá usar sua senha sempre que quiser.</Text>
           <View style={styles.btn}>
             <Pressable style={styles.btnCancel}  onPress={onClose}><Text style={styles.txtCanel}>Agora não</Text></Pressable>
-            <Pressable style={styles.btnNext} onPress={onClose}><Text style={styles.txtactivate}>ATIVAR</Text></Pressable>
+            <Pressable style={styles.btnNext} onPress={() => navigation.navigate("avatarSelect")}><Text style={styles.txtactivate}>ATIVAR</Text></Pressable>
           </View>         
         </View>
       </View>

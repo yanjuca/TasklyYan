@@ -4,9 +4,15 @@ import {
   KeyboardAvoidingView, TouchableOpacity
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { styles } from './style';
 
+
 export default function App() {
+  
+  const navigation = useNavigation();
+
   const [rememberMe, setRememberMe] = useState(false);
 
   return (
@@ -51,11 +57,11 @@ export default function App() {
           <Text style={styles.namecheck}>Lembrar de mim</Text>
         </View>
 
-        <TouchableOpacity style={styles.buttonEntrar}>
+        <TouchableOpacity style={styles.buttonEntrar} onPress={() => navigation.navigate("Tab")}>
           <Text style={styles.textButtonWhite}>ENTRAR</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonCriar}>
+        <TouchableOpacity style={styles.buttonCriar} onPress={() => navigation.navigate("SingUp")}>
           <Text style={styles.textButtonPurple}>CRIAR CONTA</Text>
         </TouchableOpacity>
       </View>
