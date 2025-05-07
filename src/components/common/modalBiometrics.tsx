@@ -38,12 +38,13 @@ const styles = StyleSheet.create({
   },
   modalTexth1:{
     fontSize:18,
-    fontWeight:500,
+    fontFamily: 'Roboto-Medium',
     marginBottom:15
   },
   modalText: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
+    fontFamily: 'Roboto-Regular',
   },
   btn:{
     flexDirection:"row",

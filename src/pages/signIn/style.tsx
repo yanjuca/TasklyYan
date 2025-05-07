@@ -27,7 +27,8 @@ export const styles = StyleSheet.create({
   label: {
     textAlign: 'left',
     marginBottom: 5,
-    fontSize: 16,
+    fontSize: 12,
+    fontFamily: 'Roboto-Regular',
     color: "#333",
   },
 
@@ -35,7 +36,8 @@ export const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     width: "100%",
     marginBottom: 2,
-    fontSize: 17,
+    fontSize: 16,
+    fontFamily: 'Roboto-Regular',
     borderColor: '#5B3CC4',
     borderRadius: 8,
     borderWidth: 2,
@@ -98,6 +100,7 @@ export const styles = StyleSheet.create({
     borderColor: '#32C35B',
     backgroundColor: '#FFF',
     marginRight: 8,
+    marginTop: 10,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -106,12 +109,14 @@ export const styles = StyleSheet.create({
   checkboxCheckmark: {
     color: '#32C35B',
     fontWeight: 'bold',
-    
+    marginTop: 10,
   },
 
 
   namecheck: {
-    color: "#000",
-    fontWeight:'bold'
+    color: "#1E1E1E",
+    fontSize: 16,
+    fontFamily: 'Roboto-Regular',
+    marginTop: 10,
   },
 });

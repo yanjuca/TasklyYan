@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     },
     titleHead: {
         fontSize: 16,
-        fontWeight: 'medium',
+        fontFamily: 'Roboto-Regular',
         color: '#000000',
     },
     backButton: {
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     },
     backButtonText: {
         color: '#F4F4F4',
-        fontWeight: 'medium',
+        fontFamily: 'Roboto-Medium',
         fontSize: 18,
     },
     titleContainer: {
@@ -43,10 +43,9 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 26,
-        fontWeight: 700,
         color: '#000',
         textAlign: 'center',
-        fontFamily: 'Roboto',
+        fontFamily: 'Roboto-Bold',
     },
     subtitle: {
         fontSize: 13,
@@ -86,8 +85,7 @@ const styles = StyleSheet.create({
     confirmButtonText: {
         color: '#fff',
         fontSize: 20,
-        fontWeight: 700,
-        fontFamily: 'Roboto',
+        fontFamily: 'Roboto-SemiBold',
     },
 });
 

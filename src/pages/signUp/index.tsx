@@ -18,23 +18,23 @@ export default function SingUp (){
                 
 
                 <Text style={styles.txth1}>CADASTRO</Text>
-                <Text>Nome Completo</Text>
+                <Text style={{fontFamily: 'Roboto-Regular', fontSize: 12, marginBottom: 5,}}>Nome Completo</Text>
                 <TextInput style={styles.txtinput} placeholder="Ex: João Gabriel"></TextInput>
                 <Text style={styles.txterro}>Erro aqui</Text>
 
-                <Text>E-mail</Text>
+                <Text style={{fontFamily: 'Roboto-Regular', fontSize: 12, marginBottom: 5,}}>E-mail</Text>
                 <TextInput style={styles.txtinput} placeholder="example@example.com"></TextInput>
                 <Text style={styles.txterro}>Erro aqui</Text>
 
-                <Text>Número</Text>
+                <Text style={{fontFamily: 'Roboto-Regular', fontSize: 12, marginBottom: 5,}}>Número</Text>
                 <TextInput style={styles.txtinput} placeholder="(DDD) 9 NNNN-NNNN"></TextInput>
                 <Text style={styles.txterro}>Erro aqui</Text>
 
-                <Text>Senha</Text>
+                <Text style={{fontFamily: 'Roboto-Regular', fontSize: 12, marginBottom: 5,}}>Senha</Text>
                 <TextInput style={styles.txtinput} placeholder="* * * * * * * *"></TextInput>
                 <Text style={styles.txterro}>Erro aqui</Text>
 
-                <Text>Confirmar Senha</Text>
+                <Text style={{fontFamily: 'Roboto-Regular', fontSize: 12, marginBottom: 5,}}>Confirmar Senha</Text>
                 <TextInput style={styles.txtinput} placeholder="* * * * * * * *"></TextInput>
                 <Text style={styles.txterro}>Erro aqui</Text>
                 

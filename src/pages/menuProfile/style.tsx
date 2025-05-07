@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f4f4f4',
+        backgroundColor: '#D9D9D9',
         paddingHorizontal: 0,
     },
     header: {
@@ -24,22 +24,20 @@ const styles = StyleSheet.create({
     },
     name: {
         fontSize: 18,
-        fontWeight: '700',
         marginBottom: 5,
-        fontFamily: 'Roboto',
+        fontFamily: 'Roboto-Medium',
         color: '#1E1E1E',
     },
     email: {
         fontSize: 16,
         color: '#1E1E1E',
         marginBottom: 5,
-        fontFamily: 'Roboto',
+        fontFamily: 'Roboto-Regular',
     },
     phone: {
         fontSize: 16,
         color: '#1E1E1E',
-        fontFamily: 'Roboto',
-        fontWeight: '600',
+        fontFamily: 'Roboto-Regular',
     },
     actionsScrollView: {
         marginTop: 5,
@@ -77,12 +75,11 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         alignContent: 'center',
         alignItems: 'center',
-        fontFamily: 'Roboto',
-        fontWeight: '700',
+        fontFamily: 'Roboto-Medium',
         marginBottom: 15,
     },
     menuContainer: {
-        marginBottom: 160,
+        marginBottom: 90,
     },
     menuItem: {
         alignSelf: 'center',
@@ -99,8 +96,7 @@ const styles = StyleSheet.create({
     },
     menuText: {
         fontSize: 18,
-        fontFamily: 'Roboto',
-        fontWeight: 700,
+        fontFamily: 'Roboto-Medium',
     },
     menuIcon: {
         fontSize: 20,
