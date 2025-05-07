@@ -81,13 +81,16 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         marginBottom: 15,
     },
+    menuContainer: {
+        marginBottom: 160,
+    },
     menuItem: {
         alignSelf: 'center',
         backgroundColor: '#fff',
         borderRadius: 12,
         paddingVertical: 25,
         paddingHorizontal: 25,
-        marginBottom: 20,
+        marginBottom: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

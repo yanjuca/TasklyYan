@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
 import styles from './style';
+import { useNavigation } from '@react-navigation/native';
+
+//Modais
 import LogoutConfirmationModal from '../../components/common/LogoutConfirmationModal';
+import ToggleBiometricsModal from '../../components/common/ToggleBiometricsModal';
+import AccountDeletionModal from '../../components/common/AccountDeletionModal';
 
 // Ícones
 import UserIcon from '../../assets/icons/profileGuy.png';
@@ -14,21 +19,61 @@ import ProfileImage from '../../assets/imgs/avatar.png';
 
 const ProfileScreen: React.FC = () => {
 
-    const [ismodalLogoutVisible, setIsModalLogoutVisible] = useState(false);
+    
+    const navigation = useNavigation();
+
+    const handleTermsAndConditionsPress = () => {
+        navigation.navigate('WebView', { url: 'https://sobreuol.noticias.uol.com.br/normas-de-seguranca-e-privacidade/en/' });
+    };
+    const [isLogoutConfirmationModalVisible, setIsLogoutConfirmationModalVisible] = useState(false);
+    const [isBiometricModalVisible, setIsBiometricModalVisible] = useState(false);
+    const [isBiometricEnabled, setIsBiometricEnabled] = useState(false);
+    const [isAccountDeletionModalVisible, setIsAccountDeletionModalVisible] = useState(false);
+
+    const handleEditProfilePress = () => {
+        navigation.navigate('profileEdit');
+    };
 
     const handleLogoutPress = () => {
-        setIsModalLogoutVisible(true);
+        setIsLogoutConfirmationModalVisible(true);
     };
 
     const handleCancelLogout = () => {
-        setIsModalLogoutVisible(false);
+        setIsLogoutConfirmationModalVisible(false);
     };
 
     const handleConfirmLogout = () => {
-        //IMPLEMENTAR LÓGICA DO LOGOUT dependente do banco de dados
         console.log('Usuário saiu da conta!');
-        setIsModalLogoutVisible(false);
+        setIsLogoutConfirmationModalVisible(false);
     };
+
+    const handleOpenBiometricModal = () => {
+        setIsBiometricModalVisible(true);
+    };
+
+    const handleCloseBiometricModal = () => {
+        setIsBiometricModalVisible(false);
+    };
+
+    const handleConfirmBiometricChange = (newState: boolean) => {
+        console.log('Biometria alterada para:', newState);
+        setIsBiometricEnabled(newState);
+        setIsBiometricModalVisible(false);
+    };
+
+    const handleOpenDeleteAccountModal = () => {
+        setIsAccountDeletionModalVisible(true);
+    };
+
+    const handleCloseDeleteAccountModal = () => {
+        setIsAccountDeletionModalVisible(false);
+    };
+
+    const handleConfirmDeleteAccount = () => {
+        console.log('Conta deletada!');
+        setIsAccountDeletionModalVisible(false);
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -46,13 +91,13 @@ const ProfileScreen: React.FC = () => {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.actionsContainer}
             >
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleEditProfilePress}>
                     <View style={styles.actionContent}>
-                        <Text style={styles.actionText}>Editar           Informações Pessoais</Text>
+                        <Text style={styles.actionText}>Editar Informações Pessoais</Text>
                         <Image source={UserIcon} style={styles.actionIcon} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleOpenBiometricModal}>
                     <View style={styles.actionContent}>
                         <Text style={styles.actionText}>Mudar Biometria</Text>
                         <Image source={FingerprintIcon} style={styles.actionIcon} />
@@ -64,28 +109,47 @@ const ProfileScreen: React.FC = () => {
                         <Image source={LogoutIcon} style={styles.actionIcon} />
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.actionButton}>
+                <TouchableOpacity style={styles.actionButton} onPress={handleOpenDeleteAccountModal}>
                     <View style={styles.actionContent}>
                         <Text style={styles.actionText}>Excluir Conta</Text>
                         <Image source={DeleteAccIcon} style={styles.actionIcon} />
                     </View>
                 </TouchableOpacity>
             </ScrollView>
+        
+            <View style={styles.menuContainer}>
+              <TouchableOpacity style={styles.menuItem}>
+                  <Text style={styles.menuText}>Preferências</Text>
+                  <Image source={ChevronRightIcon} style={styles.menuIcon} />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.menuItem} onPress={handleTermsAndConditionsPress}>
+                  <Text style={styles.menuText}>Termos e regulamentos</Text>
+                  <Image source={ChevronRightIcon} style={styles.menuIcon} />
+              </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuText}>Preferências</Text>
-                <Image source={ChevronRightIcon} style={styles.menuIcon} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
-                <Text style={styles.menuText}>Termos e regulamentos</Text>
-                <Image source={ChevronRightIcon} style={styles.menuIcon} />
-            </TouchableOpacity>
-
-            {ismodalLogoutVisible && (
+            {isLogoutConfirmationModalVisible && (
                 <LogoutConfirmationModal
-                    visible={ismodalLogoutVisible}
+                    isVisible={isLogoutConfirmationModalVisible}
                     onCancel={handleCancelLogout}
                     onConfirm={handleConfirmLogout}
+                />
+            )}
+
+            {isBiometricModalVisible && (
+                <ToggleBiometricsModal
+                    isVisible={isBiometricModalVisible}
+                    isBiometricEnabled={isBiometricEnabled}
+                    onCancel={handleCloseBiometricModal}
+                    onConfirm={handleConfirmBiometricChange}
+                />
+            )}
+
+            {isAccountDeletionModalVisible && (
+                <AccountDeletionModal
+                    isVisible={isAccountDeletionModalVisible}
+                    onCancel={handleCloseDeleteAccountModal}
+                    onConfirm={handleConfirmDeleteAccount}
                 />
             )}
         </View>

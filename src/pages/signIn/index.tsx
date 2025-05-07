@@ -4,17 +4,19 @@ import {
   KeyboardAvoidingView, TouchableOpacity
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { styles } from './style';
-import ModalCriarTarefa from '../../components/common/modalcriartarefa'; // <== Adicione isso
+
 
 export default function App() {
-  const [modalVisible, setModalVisible] = useState(false); // <== controle do modal
+  
+  const navigation = useNavigation();
+
+  const [rememberMe, setRememberMe] = useState(false);
 
   return (
     <KeyboardAvoidingView style={styles.background}>
-      {/* Modal visível */}
-      <ModalCriarTarefa visible={modalVisible} onClose={() => setModalVisible(false)} />
-
       <View style={styles.containerLogo}>
         <Image
           source={require('../../assets/imgs/frame1.png')}
@@ -40,16 +42,26 @@ export default function App() {
         />
         <Text style={styles.error}>Erro aqui</Text>
 
-        <Text style={styles.namecheck}>Lembrar de mim</Text>
+        {/* Checkbox personalizado */}
+        <View style={styles.checkboxContainer}>
+          <TouchableOpacity
+            onPress={() => setRememberMe(!rememberMe)}
+            style={[
+              styles.checkbox,
+            ]}
+          >
+            {rememberMe && (
+              <Text style={styles.checkboxCheckmark}>✓</Text>
+            )}
+          </TouchableOpacity>
+          <Text style={styles.namecheck}>Lembrar de mim</Text>
+        </View>
 
-        <TouchableOpacity
-          style={styles.buttonEntrar}
-          onPress={() => setModalVisible(true)} // <== abre o modal
-        >
+        <TouchableOpacity style={styles.buttonEntrar} onPress={() => navigation.navigate("Tab")}>
           <Text style={styles.textButtonWhite}>ENTRAR</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonCriar}>
+        <TouchableOpacity style={styles.buttonCriar} onPress={() => navigation.navigate("SingUp")}>
           <Text style={styles.textButtonPurple}>CRIAR CONTA</Text>
         </TouchableOpacity>
       </View>
