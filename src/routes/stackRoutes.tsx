@@ -1,6 +1,7 @@
 import React from "react"; 
 
 
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import SingIn from "../pages/signIn";
@@ -13,6 +14,9 @@ import avatarEdit from "../pages/avatarEdit";
 import WebViewPage from '../pages/webView';
 import Tab from "../routes/index"
 import HomePageContent from "../pages/homePageContent";
+import homePage from "../pages/homePage";
+import SingUp from "../pages/signUp";
+
 import homePage from "../pages/homePage";
 import SingUp from "../pages/signUp";
 
@@ -31,7 +35,12 @@ export default function StackRouter(){
         <Stack.Screen name="profileEdit" component={profileEdit} options={{headerShown:false}}/>
         <Stack.Screen name="avatarEdit" component={avatarEdit} options={{headerShown:false}}/>
         <Stack.Screen name="WebView" component={WebViewPage} />
+        <Stack.Screen name="profileEdit" component={profileEdit} options={{headerShown:false}}/>
+        <Stack.Screen name="avatarEdit" component={avatarEdit} options={{headerShown:false}}/>
+        <Stack.Screen name="WebView" component={WebViewPage} />
         <Stack.Screen name="HomePageContent" component={HomePageContent} options={{headerShown:false}}/>
+        <Stack.Screen name="homePage" component={homePage} options={{headerShown:false}}/>
+        <Stack.Screen name="SingUp" component={SingUp} options={{headerShown:false}}/>
         <Stack.Screen name="homePage" component={homePage} options={{headerShown:false}}/>
         <Stack.Screen name="SingUp" component={SingUp} options={{headerShown:false}}/>
       </Stack.Navigator>    
