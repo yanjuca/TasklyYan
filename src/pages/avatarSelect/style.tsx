@@ -11,11 +11,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     title: {
-        fontSize: 26,
-        fontWeight: 700,
+        fontSize: 24,
         color: '#000',
         textAlign: 'center',
-        fontFamily: 'Roboto',
+        fontFamily: 'Roboto-Bold',
     },
     subtitle: {
         fontSize: 13,
@@ -55,8 +54,7 @@ const styles = StyleSheet.create({
     confirmButtonText: {
         color: '#fff',
         fontSize: 20,
-        fontWeight: 700,
-        fontFamily: 'Roboto',
+        fontFamily: 'Roboto-SemiBold',
     },
 });
 

@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     color: '#F4F4F4',
-    fontWeight: 'medium',
+    fontFamily: 'Roboto-Medium',
     fontSize: 18,
   },
   titleHead: {
     fontSize: 16,
-    fontWeight: 'medium',
+    fontFamily: 'Roboto-Medium',
     color: '#000000',
   },
   formContainer: {
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 12,
     color: '#1E1E1E',
-    fontWeight: 'regular',
+    fontFamily: 'Roboto-Medium',
     marginBottom: 5,
   },
   input: {
@@ -53,12 +53,14 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#FFFFFF',
     fontSize: 16,
+    fontFamily: 'Roboto-Regular',
     color: '#212121',
   },
   errorText: {
     color: '#E63946',
     fontSize: 12,
     marginBottom: 10,
+    fontFamily: 'Roboto-Regular',
   },
   continueButton: {
     backgroundColor: '#5B3CC4',
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
   },
   continueButtonText: {
     color: '#FFFFFF',
-    fontWeight: 'bold',
+    fontFamily: 'Roboto-SemiBold',
     fontSize: 18,
   },
 });

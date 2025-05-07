@@ -70,7 +70,7 @@ const ProfileEdit: React.FC = () => {
                     onChangeText={setFullName}
                     placeholder="Digite seu nome completo"
                     />
-                { (!isFormValid && !isFullnameValid(fullName) ) && <Text style={styles.errorText}>nome inválido</Text>}
+                { (!isFormValid && !isFullnameValid(fullName) ) && <Text style={styles.errorText}>Error aqui</Text>}
 
                 <Text style={styles.label}>E-mail</Text>
                 <TextInput
@@ -80,7 +80,7 @@ const ProfileEdit: React.FC = () => {
                     placeholder="example@example.com"
                     keyboardType="email-address"
                     />
-                {(!isFormValid && !isEmailValid(email)) && <Text style={styles.errorText}>email inválido</Text>}
+                {(!isFormValid && !isEmailValid(email)) && <Text style={styles.errorText}>Error aqui</Text>}
 
                 <Text style={styles.label}>Número</Text>
                 <TextInput
@@ -90,7 +90,7 @@ const ProfileEdit: React.FC = () => {
                     placeholder="(DDD) 9 NNNN-NNNN"
                     keyboardType="phone-pad"
                     />
-                {(!isFormValid && !isPhoneNumberValid(phoneNumber)) && <Text style={styles.errorText}>numero inválido</Text>}
+                {(!isFormValid && !isPhoneNumberValid(phoneNumber)) && <Text style={styles.errorText}>Error aqui</Text>}
 
             </View>
 

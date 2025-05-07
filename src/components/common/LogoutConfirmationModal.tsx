@@ -69,7 +69,7 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
           },
           modalTitle: {
             fontSize: 18,
-            fontWeight: 'bold',
+            fontFamily: 'Roboto-Medium',
             marginBottom: 8,
             color: '#1E1E1E',
           },
@@ -78,7 +78,7 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
             color: '#1E1E1E',
             textAlign: 'justify',
             marginBottom: 15,
-            fontWeight: 'regular',
+            fontFamily: 'Roboto-Regular',
           },
           buttonsContainer: {
             flexDirection: 'row',
@@ -104,11 +104,12 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
           },
           buttonText: {
             color: '#fff',
-            fontWeight: 'medium',
+            fontFamily: 'Roboto-Medium',
             fontSize: 18,
           },
           cancelButtonText: {
             color: '#5B3CC4',
+            fontFamily: 'Roboto-Medium',
           },
     });
 
