@@ -11,9 +11,12 @@ import menuProfile from "../pages/menuProfile";
 import profileEdit from "../pages/profileEdit";
 import avatarEdit from "../pages/avatarEdit";
 import WebViewPage from '../pages/webView';
-import Tab from "../routes/index"
+import Tab from "../routes/index";
 import HomePageContent from "../pages/homePageContent";
 import homePage from "../pages/homePage";
+import SingUp from "../pages/signUp";
+
+
 const Stack = createNativeStackNavigator();
 
 export default function StackRouter(){
@@ -30,6 +33,7 @@ export default function StackRouter(){
         <Stack.Screen name="WebView" component={WebViewPage} />
         <Stack.Screen name="HomePageContent" component={HomePageContent} options={{headerShown:false}}/>
         <Stack.Screen name="homePage" component={homePage} options={{headerShown:false}}/>
+        <Stack.Screen name="SingUp" component={SingUp} options={{headerShown:false}}/>
       </Stack.Navigator>    
   )
 }
