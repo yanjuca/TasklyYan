@@ -35,7 +35,7 @@ export const styles = StyleSheet.create({
   input: {
     backgroundColor: "#FFFFFF",
     width: "100%",
-    marginBottom: 2,
+    marginBottom: 20,
     fontSize: 16,
     fontFamily: 'Roboto-Regular',
     borderColor: '#5B3CC4',

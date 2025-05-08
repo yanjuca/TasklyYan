@@ -21,7 +21,7 @@ const ModalComponent = ({ visible, onClose }) => {
           <Text style={styles.modalTexth1}>Ative o Desbloqueio por Biometria</Text>
           <Text style={styles.modalText}>Use sua impressão digital para acessar seu app de tarefas com rapidez e segurança. Se preferir, você ainda poderá usar sua senha sempre que quiser.</Text>
           <View style={styles.btn}>
-            <Pressable style={styles.btnCancel}  onPress={onClose}><Text style={styles.txtCanel}>Agora não</Text></Pressable>
+            <Pressable style={styles.btnCancel}  onPress={() => navigation.navigate("avatarSelect")}><Text style={styles.txtCanel}>Agora não</Text></Pressable>
             <Pressable style={styles.btnNext} onPress={() => navigation.navigate("avatarSelect")}><Text style={styles.txtactivate}>ATIVAR</Text></Pressable>
           </View>         
         </View>

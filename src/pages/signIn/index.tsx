@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import {
   Text, View, Image, TextInput,
-  KeyboardAvoidingView, TouchableOpacity
+  KeyboardAvoidingView, TouchableOpacity,
+  Alert
 } from 'react-native';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -10,11 +14,56 @@ import { styles } from './style';
 
 
 export default function App() {
+
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+
   
   const navigation = useNavigation();
 
   const [rememberMe, setRememberMe] = useState(false);
 
+
+  const handleLogin = async () => {
+    if (!email || !senha) {
+      Alert.alert("Preencha todos os campos!");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      Alert.alert('Digite um e-mail válido');
+      return;
+    }
+    if (senha.length < 8){
+      Alert.alert('a senha precisa ter no minimo 8 caracteres')
+      return;
+    }
+  
+    try {
+      const storedUsers = await AsyncStorage.getItem('users');
+      const users = storedUsers ? JSON.parse(storedUsers) : [];
+  
+      const userFound = users.find(
+        (user) => user.email === email && user.senha === senha
+      );
+      
+     
+
+      if (userFound) {
+        await AsyncStorage.setItem("loggedUserEmail", userFound.email); 
+        await AsyncStorage.setItem("loggedUserNome", userFound.nome); 
+        await AsyncStorage.setItem("loggedUserNumero", userFound.numero); 
+        navigation.navigate("Tab"); 
+        
+      } else {
+        Alert.alert("Email ou senha incorretos!");
+       
+      }
+    } catch (error) {
+      console.error("Erro ao buscar usuários:", error);
+      Alert.alert("Erro interno. Tente novamente.");
+    }
+  };
+  
   return (
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.containerLogo}>
@@ -30,17 +79,20 @@ export default function App() {
           style={styles.input}
           placeholder="Digite seu email"
           autoCorrect={false}
+          value={email}
+          onChangeText={setEmail}
         />
-        <Text style={styles.error}>Erro aqui</Text>
 
         <Text style={styles.label}>Senha</Text>
         <TextInput
           style={styles.input}
           placeholder="Digite sua senha"
           secureTextEntry
+          maxLength={8}
           autoCorrect={false}
+          value={senha}
+          onChangeText={setSenha}
         />
-        <Text style={styles.error}>Erro aqui</Text>
 
         {/* Checkbox personalizado */}
         <View style={styles.checkboxContainer}>
@@ -57,7 +109,7 @@ export default function App() {
           <Text style={styles.namecheck}>Lembrar de mim</Text>
         </View>
 
-        <TouchableOpacity style={styles.buttonEntrar} onPress={() => navigation.navigate("Tab")}>
+        <TouchableOpacity style={styles.buttonEntrar} onPress={handleLogin}>
           <Text style={styles.textButtonWhite}>ENTRAR</Text>
         </TouchableOpacity>
 

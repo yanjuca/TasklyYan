@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './style';
 import ModalCriarTarefa from '../../components/common/modalcriartarefa';
 
+
 export default function HomeScreen() {
   const [modalVisible, setModalVisible] = useState(false);
   const [tarefas, setTarefas] = useState([]);
@@ -44,8 +45,9 @@ export default function HomeScreen() {
             </>
           ) : ( 
             tarefas.map((tarefa, index) => (
-              <View style={styles.containerTesk}>
-                <View key={index} style={styles.contentTesk}>
+              <View key={index} style={styles.containerTesk}>
+                
+                <View  style={styles.contentTesk}>
                 <View style={styles.tasktitle}>
                   <Text style={styles.txth1}>{tarefa.titulo}</Text>
                   <TouchableOpacity
