@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
         fontWeight:700
     },
     content:{
-
+        
     },
     checkContainer: {
         width: 24,

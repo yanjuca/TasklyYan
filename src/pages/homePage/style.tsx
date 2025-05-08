@@ -57,7 +57,84 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
   },
- 
+  txtTitle:{
+    fontSize:24,
+    fontWeight:700
+},
+containerTesk:{
+  width:"100%",
+},
+  contentTesk:{
+    backgroundColor:"white",
+    padding:15,
+    width:"100%",
+    borderRadius:8,
+    marginBottom:15,
+    elevation: 5    
+  },
+  txth1:{
+    color:"Black",
+    fontSize:20,
+    fontWeight:"bold"
+  },
+  txtp:{
+    fontSize:16,
+    marginTop: 15
+  },
+  contSpan:{
+    marginTop:10,
+    flexDirection:"row",
+    justifyContent:"space-between",
+    overflow: "hidden"
+},
+span:{
+    fontSize:12,
+    margin:5,
+    paddingHorizontal:8,
+    paddingVertical:2,
+    borderRadius:8,
+    backgroundColor:"#E6E0F7"
+},
+btn:{
+  marginTop:15,
+  marginBottom:25,
+  alignItems:"center"
+},
+txtbtn:{        
+  borderRadius:8,
+  paddingVertical:5,
+  paddingHorizontal:15,
+  backgroundColor:"#5B3CC4",
+  color:"white",
+  fontWeight:400,
+  fontSize:16
+},
+checkContainer: {
+  width: 24,
+  height: 24,
+  borderRadius: 12,
+  borderWidth: 3,
+  borderColor: '#B58B46',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: 'white',
+},
+checkMark: {
+  borderWidth: 0, 
+  color: 'white',
+  fontSize: 16,
+  fontWeight: 'bold',
+  backgroundColor: '#30C25D',
+  width: 22,
+  height: 22,
+  textAlign: 'center',
+  borderRadius: 11,
+  lineHeight: 22,
+},
+tasktitle:{
+  flexDirection:"row",
+  justifyContent:"space-between"
+}
 });
  
 export default styles;

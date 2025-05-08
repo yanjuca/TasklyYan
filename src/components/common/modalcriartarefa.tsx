@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Modal,
   View,
@@ -8,7 +8,30 @@ import {
   StyleSheet,
 } from 'react-native';
 
-export default function modalcriarTarefa({ visible, onClose }) {
+export default function ModalCriarTarefa({ visible, onClose, onCreate }) {
+  const [titulo, setTitulo] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [prazo, setPrazo] = useState('');
+
+  const handleCreate = () => {
+    if (!titulo.trim() || !descricao.trim() || !prazo.trim()) {
+      alert('Preencha todos os campos!');
+      return;
+    }
+
+    const novaTarefa = {
+      titulo,
+      descricao,
+      prazo,
+    };
+
+    onCreate(novaTarefa); // envia a tarefa pra HomeScreen
+    setTitulo('');
+    setDescricao('');
+    setPrazo('');
+    onClose();
+  };
+
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.overlay}>
@@ -16,27 +39,36 @@ export default function modalcriarTarefa({ visible, onClose }) {
           <Text style={styles.title}>Criar tarefa</Text>
 
           <Text style={styles.label}>Título</Text>
-          <TextInput placeholder="Ex: bater o ponto" style={styles.input} />
-          <Text style={styles.error}>Erro aqui</Text>
+          <TextInput
+            value={titulo}
+            onChangeText={setTitulo}
+            placeholder="Ex: bater o ponto"
+            style={styles.input}
+          />
 
           <Text style={styles.label}>Descrição</Text>
           <TextInput
+            value={descricao}
+            onChangeText={setDescricao}
             multiline
             style={[styles.input, { height: 60 }]}
-            placeholder="Ex : bater o ponto pelo site do kairos e depois tenho que sair para tomar café"
+            placeholder="Descreva a tarefa"
           />
-          <Text style={styles.error}>Erro aqui</Text>
 
           <Text style={styles.label}>Prazo</Text>
-          <TextInput placeholder="Ex : 04/28/2025" style={styles.input} />
-          <Text style={styles.error}>Erro aqui</Text>
+          <TextInput
+            value={prazo}
+            onChangeText={setPrazo}
+            placeholder="Ex: 04/28/2025"
+            style={styles.input}
+          />
 
           <View style={styles.buttonRow}>
             <TouchableOpacity style={styles.buttonCancel} onPress={onClose}>
               <Text style={styles.cancelText}>CANCELAR</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.buttonCreate}>
+            <TouchableOpacity style={styles.buttonCreate} onPress={handleCreate}>
               <Text style={styles.createText}>CRIAR</Text>
             </TouchableOpacity>
           </View>
@@ -45,6 +77,9 @@ export default function modalcriarTarefa({ visible, onClose }) {
     </Modal>
   );
 }
+
+// (mantém o mesmo StyleSheet que você já tinha)
+
 
 const styles = StyleSheet.create({
   overlay: {

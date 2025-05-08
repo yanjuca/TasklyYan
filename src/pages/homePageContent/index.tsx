@@ -49,14 +49,14 @@ export default function HomePageContent(){
                     </View>
 
                     <View style={styles.task}>
-                    <View style={styles.tasktitle}>
-                            <Text style={styles.txtTi}>Jogar vôlei</Text>
-                            <TouchableOpacity
-                                style={styles.checkContainer}
-                                onPress={() => toggleCheck(2)}
-                                >
-                                {selectedTask === 2 && <Text style={styles.checkMark}>✓</Text>}
-                            </TouchableOpacity>
+                        <View style={styles.tasktitle}>
+                                <Text style={styles.txtTi}>Jogar vôlei</Text>
+                                <TouchableOpacity
+                                    style={styles.checkContainer}
+                                    onPress={() => toggleCheck(2)}
+                                    >
+                                    {selectedTask === 2 && <Text style={styles.checkMark}>✓</Text>}
+                                </TouchableOpacity>
                         </View>
                         <Text style={styles.txt}>Marcar pelada com o pessoal do CT.</Text>
                         <View style={styles.contSpan}>
