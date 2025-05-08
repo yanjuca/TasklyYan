@@ -25,20 +25,20 @@ export const styles = StyleSheet.create({
         
     },
     checkContainer: {
-        width: 24,
-        height: 24,
+        width: 22,
+        height: 22,
         borderRadius: 12,
-        borderWidth: 3,
+        borderWidth: 2.5,
+        marginTop: 5,
+        marginRight: 5,
         borderColor: '#B58B46',
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'white',
       },
-      checkMark: {
-        borderWidth: 0, 
+      checkMark: { 
         color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 13,
         backgroundColor: '#30C25D',
         width: 22,
         height: 22,
@@ -56,11 +56,12 @@ export const styles = StyleSheet.create({
         marginBottom:15
     },
     task:{
-        padding:10,
+        paddingTop: 20,
+        paddingHorizontal: 10,
         backgroundColor:"white",
         width:"100%",
-        borderRadius:8,
-        marginBottom:15,
+        borderRadius: 8,
+        marginBottom: 15,
         elevation: 5
     },
     tasktitle:{        
@@ -72,11 +73,11 @@ export const styles = StyleSheet.create({
     },
     txtTi:{
         fontSize:20,
-        fontWeight:600
+        fontFamily: 'Roboto-SemiBold',
     },
     txt:{
         fontSize:16,
-        fontWeight:600
+        fontFamily: 'Roboto-Regular',
     },
     contSpan:{
         marginTop:10,
@@ -99,12 +100,12 @@ export const styles = StyleSheet.create({
     },
     txtbtn:{        
         borderRadius:8,
-        paddingVertical:5,
-        paddingHorizontal:15,
+        paddingVertical:3,
+        paddingHorizontal:10,
         backgroundColor:"#5B3CC4",
-        color:"white",
-        fontWeight:400,
-        fontSize:16
+        color:"#E6E0F7",
+        fontFamily: 'Roboto-Regular',
+        fontSize:16, 
     },
     criar:{        
         alignItems:"center",
@@ -112,11 +113,11 @@ export const styles = StyleSheet.create({
     txtcriar:{
         marginTop:90,
         borderRadius:8,
-        fontWeight:600,
-        fontSize:18,
-        paddingHorizontal: 120,
+        fontFamily: 'Roboto-SemiBold',
+        fontSize:20,
+        paddingHorizontal: 113,
         paddingVertical:12,
-        color:"white",
+        color:"#FFFFFF",
         backgroundColor:"#5B3CC4"
     }
 }) 
