@@ -85,7 +85,6 @@ export const styles = StyleSheet.create({
     fontSize: 12,
   },
 
-  // ✅ Novo estilo para o container do checkbox
   checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -119,4 +118,53 @@ export const styles = StyleSheet.create({
     fontFamily: 'Roboto-Regular',
     marginTop: 10,
   },
+
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  modalContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingVertical: 24,
+    paddingHorizontal: 20,
+    width: '80%',
+    elevation: 5,
+  },
+
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 6,
+    color: '#000',
+    textAlign: 'left',
+  },
+
+  modalMessage: {
+    fontSize: 14,
+    color: '#333',
+    marginBottom: 20,
+    textAlign: 'left',
+    fontWeight: 'bold',
+
+  },
+
+  modalButton: {
+    borderWidth: 2,
+    borderColor: '#583CC4',
+    borderRadius: 7,
+    paddingVertical: 8,
+    paddingHorizontal: 110,
+    fontWeight: 'bold',
+  },
+
+  modalButtonText: {
+    color: '#583CC4',
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
+
 });
