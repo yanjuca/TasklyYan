@@ -104,13 +104,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#e6e0f7',
+    borderColor:'#5b3cc4',
   },
   confirmButton: {
-    backgroundColor: '#2E86DE',
+    backgroundColor: '#32c25b',
   },
   cancelButtonText: {
-    color: '#333',
+    color: '#5b3cc4',
     fontWeight: 'bold',
   },
   confirmButtonText: {
