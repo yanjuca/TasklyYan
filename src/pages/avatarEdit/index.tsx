@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './style';
 import AvatarImage from '../../assets/imgs/avatar.png';
 import { useNavigation } from "@react-navigation/native";
+import ConfirmEditModal from '../../components/common/ConfirmEditModal';
 
 import ChevronLeftIcon from '../../assets/icons/ChevronLeft.png';
 
@@ -14,6 +15,7 @@ interface Avatar {
 
 const AvatarSelectionScreen: React.FC = () => {
         const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
+        const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
 
         const navigation = useNavigation();
 
@@ -37,8 +39,11 @@ const AvatarSelectionScreen: React.FC = () => {
         const handleConfirmSelection = () => {
                 if (selectedAvatarId) {
                         console.log('Avatar selecionado: ', selectedAvatarId);
+                        setIsConfirmationModalVisible(true);
+                } else {
+                        console.warn('Nenhum avatar selecionado.');
                 }
-        }
+        };
 
         return (
                 <View style={styles.container}>
@@ -83,6 +88,13 @@ const AvatarSelectionScreen: React.FC = () => {
                         >
                                 <Text style={styles.confirmButtonText}>CONFIRMAR EDIÇÃO</Text>
                         </TouchableOpacity>
+                        <ConfirmEditModal
+                                visible={isConfirmationModalVisible}
+                                onRequestClose={() => {
+                                setIsConfirmationModalVisible(false);
+                                navigation.pop(2); // Opcional: Voltar para a tela anterior ao fechar o modal
+                                }}
+                        />
                 </View>
         );
 };
