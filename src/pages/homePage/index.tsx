@@ -1,17 +1,51 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import styles from './style';
 import ModalCriarTarefa from '../../components/common/modalcriartarefa';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 
 export default function HomeScreen() {
+
+  const [userEmail, setUserEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [tarefas, setTarefas] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
 
-  const handleCriarTarefa = (novaTarefa) => {
-    setTarefas([...tarefas, novaTarefa]);
+  const salvarTarefas = async (dados, email) => {
+    try {
+      await AsyncStorage.setItem(`tarefas_${email}`, JSON.stringify(dados));
+    } catch (error) {
+      Alert.alert("Erro ao salvar tarefas", error.message);
+    }
   };
+
+  const carregarTarefas = async (email) => {
+    try {
+      const dadosSalvos = await AsyncStorage.getItem(`tarefas_${email}`);
+      if (dadosSalvos) {
+        setTarefas(JSON.parse(dadosSalvos));
+      }
+    } catch (erro) {
+      console.log('Erro ao carregar tarefas:', erro);
+    }
+  };
+
+  const handleCriarTarefa = async (novaTarefa) => {
+  const novasTarefas = [...tarefas, novaTarefa];
+  setTarefas(novasTarefas);
+  await salvarTarefas(novasTarefas, userEmail);
+};
+
+ useEffect(() => {
+  const buscarEmail = async () => {
+    const email = await AsyncStorage.getItem('loggedUserEmail');
+    setUserEmail(email);
+    if (email) carregarTarefas(email); // Carrega tarefas do usuário específico
+  };
+  buscarEmail();
+}, []);
 
   const toggleCheck = (taskId) => {
     setSelectedTask(prev => prev === taskId ? null : taskId);

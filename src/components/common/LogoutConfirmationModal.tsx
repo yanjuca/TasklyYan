@@ -1,8 +1,6 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
-
 interface LogoutConfirmationModalProps {
     isVisible: boolean;
     onCancel: () => void;
@@ -14,9 +12,6 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
     onCancel,
     onConfirm,
 }) => {
-
-  const navigation = useNavigation();
-
     return (
         <Modal
             visible={isVisible}
@@ -42,7 +37,7 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.button, styles.confirmButton]}
-                            onPress={() => navigation.navigate("SingIn")}
+                            onPress={onConfirm}
                         >
                             <Text style={styles.buttonText}>SAIR</Text>
                         </TouchableOpacity>
@@ -53,65 +48,64 @@ const LogoutConfirmationModal: React.FC<LogoutConfirmationModalProps> = ({
     );
 };
 
-    const styles = StyleSheet.create({
-        modalContainer: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(17, 24, 39, 0.7)',
-          },
-          modalContent: {
-            backgroundColor: '#F4F4F4',
-            borderRadius: 12,
-            padding: 25,
-            width: '85%',
-            alignItems: 'flex-start',
-          },
-          modalTitle: {
-            fontSize: 18,
-            fontFamily: 'Roboto-Medium',
-            marginBottom: 8,
-            color: '#1E1E1E',
-          },
-          modalText: {
-            fontSize: 16,
-            color: '#1E1E1E',
-            textAlign: 'justify',
-            marginBottom: 15,
-            fontFamily: 'Roboto-Regular',
-          },
-          buttonsContainer: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '100%',
-          },
-          button: {
-            borderRadius: 8,
-            paddingVertical: 5,
-            paddingHorizontal: 25,
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginHorizontal: 0,
-          },
-          cancelButton: {
-            backgroundColor: '#F4F4F4',
-            borderColor: '#5B3CC4',
-            borderWidth: 2,
-          },
-          confirmButton: {
-            backgroundColor: '#E63946',
-            paddingHorizontal: 45,
-          },
-          buttonText: {
-            color: '#fff',
-            fontFamily: 'Roboto-Medium',
-            fontSize: 18,
-          },
-          cancelButtonText: {
-            color: '#5B3CC4',
-            fontFamily: 'Roboto-Medium',
-          },
-    });
-
+const styles = StyleSheet.create({
+    modalContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(17, 24, 39, 0.7)',
+    },
+    modalContent: {
+        backgroundColor: '#F4F4F4',
+        borderRadius: 12,
+        padding: 25,
+        width: '85%',
+        alignItems: 'flex-start',
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontFamily: 'Roboto-Medium',
+        marginBottom: 8,
+        color: '#1E1E1E',
+    },
+    modalText: {
+        fontSize: 16,
+        color: '#1E1E1E',
+        textAlign: 'justify',
+        marginBottom: 15,
+        fontFamily: 'Roboto-Regular',
+    },
+    buttonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    button: {
+        borderRadius: 8,
+        paddingVertical: 5,
+        paddingHorizontal: 25,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginHorizontal: 0,
+    },
+    cancelButton: {
+        backgroundColor: '#F4F4F4',
+        borderColor: '#5B3CC4',
+        borderWidth: 2,
+    },
+    confirmButton: {
+        backgroundColor: '#E63946',
+        paddingHorizontal: 45,
+    },
+    buttonText: {
+        color: '#fff',
+        fontFamily: 'Roboto-Medium',
+        fontSize: 18,
+    },
+    cancelButtonText: {
+        color: '#5B3CC4',
+        fontFamily: 'Roboto-Medium',
+    },
+});
 
 export default LogoutConfirmationModal;
