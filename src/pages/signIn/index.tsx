@@ -1,69 +1,63 @@
 import React, { useState } from 'react';
 import {
   Text, View, Image, TextInput,
-  KeyboardAvoidingView, TouchableOpacity,
-  Alert
+  KeyboardAvoidingView, TouchableOpacity, Alert
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
 import { useNavigation } from '@react-navigation/native';
+import { ModalErro } from '../../components/common/modalErrorSignin';
 
 import { styles } from './style';
 
-
 export default function App() {
+  const [ismodalvisible, setIsModalVisible] = useState(false);
+  const openModal = () => setIsModalVisible(true);
+  const closeModal = () => setIsModalVisible(false);
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-
-  
-  const navigation = useNavigation();
-
   const [rememberMe, setRememberMe] = useState(false);
-
+  const navigation = useNavigation();
 
   const handleLogin = async () => {
     if (!email || !senha) {
-      Alert.alert("Preencha todos os campos!");
+      openModal();
       return;
     }
+
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      Alert.alert('Digite um e-mail válido');
+      openModal();
       return;
     }
-    if (senha.length < 8){
-      Alert.alert('a senha precisa ter no minimo 8 caracteres')
+
+    if (senha.length < 8) {
+      openModal();
       return;
     }
-  
+
     try {
       const storedUsers = await AsyncStorage.getItem('users');
       const users = storedUsers ? JSON.parse(storedUsers) : [];
-  
+
       const userFound = users.find(
         (user) => user.email === email && user.senha === senha
       );
-      
-     
 
       if (userFound) {
-        await AsyncStorage.setItem("loggedUserEmail", userFound.email); 
-        await AsyncStorage.setItem("loggedUserNome", userFound.nome); 
-        await AsyncStorage.setItem("loggedUserNumero", userFound.numero); 
-        navigation.navigate("Tab"); 
-        
+        await AsyncStorage.setItem("loggedUserEmail", userFound.email);
+        await AsyncStorage.setItem("loggedUserNome", userFound.nome);
+        await AsyncStorage.setItem("loggedUserNumero", userFound.numero);
+        navigation.navigate("Tab");
       } else {
-        Alert.alert("Email ou senha incorretos!");
-       
+        openModal();
       }
     } catch (error) {
       console.error("Erro ao buscar usuários:", error);
       Alert.alert("Erro interno. Tente novamente.");
     }
   };
-  
+
   return (
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.containerLogo}>
@@ -94,13 +88,10 @@ export default function App() {
           onChangeText={setSenha}
         />
 
-        {/* Checkbox personalizado */}
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             onPress={() => setRememberMe(!rememberMe)}
-            style={[
-              styles.checkbox,
-            ]}
+            style={styles.checkbox}
           >
             {rememberMe && (
               <Text style={styles.checkboxCheckmark}>✓</Text>
@@ -113,10 +104,15 @@ export default function App() {
           <Text style={styles.textButtonWhite}>ENTRAR</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonCriar} onPress={() => navigation.navigate("SingUp")}>
+        <TouchableOpacity
+          style={styles.buttonCriar}
+          onPress={() => navigation.navigate("SingUp")}
+        >
           <Text style={styles.textButtonPurple}>CRIAR CONTA</Text>
         </TouchableOpacity>
       </View>
+
+      <ModalErro visible={ismodalvisible} onClose={closeModal} />
     </KeyboardAvoidingView>
   );
 }
