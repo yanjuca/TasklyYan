@@ -1,17 +1,45 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert } from 'react-native';
 import styles from './style';
 import ModalCriarTarefa from '../../components/common/modalcriartarefa';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect } from 'react';
 
 
 export default function HomeScreen() {
+
   const [modalVisible, setModalVisible] = useState(false);
   const [tarefas, setTarefas] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
 
-  const handleCriarTarefa = (novaTarefa) => {
-    setTarefas([...tarefas, novaTarefa]);
+  const salvarTarefas =  async (dados) => {
+    try {
+      await AsyncStorage.setItem('tarefas', JSON.stringify(dados))
+    } catch (error) {
+      Alert.alert("erro ao salvar", error)
+    }
+  }
+
+  const carregarTarefas = async () =>{
+    try {
+    const dadosSalvos = await AsyncStorage.getItem('tarefas');
+    if (dadosSalvos) {
+      setTarefas(JSON.parse(dadosSalvos));
+    }
+  } catch (erro) {
+    console.log('Erro ao carregar:', erro);
+  }
+  }
+
+  const handleCriarTarefa =  async (novaTarefa) => {
+    const novasTarefas = ([...tarefas, novaTarefa]);
+    setTarefas(novasTarefas);
+    await salvarTarefas(novasTarefas);
   };
+
+  useEffect(() => {
+  carregarTarefas();
+}, []);
 
   const toggleCheck = (taskId) => {
     setSelectedTask(prev => prev === taskId ? null : taskId);
