@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity} from "react-native";
 import { styles } from "./styles";
+import FilterModal from "../../components/common/FilterModal";
 export default function HomePageContent(){
 
     const [checked, setChecked] = useState(false);
@@ -9,7 +10,22 @@ export default function HomePageContent(){
     const toggleCheck = (taskId) => {
         setSelectedTask(prev => prev === taskId ? null : taskId);
       };
-          
+
+    const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+
+    const openFilterModal = () => {
+        setIsFilterModalVisible(true);
+    };
+
+    const closeFilterModal = () => {
+        setIsFilterModalVisible(false);
+    };
+
+    const handleApplyFilters = (filters: any) => {
+        // Here you will implement the logic to filter your tasks based on the 'filters'
+        console.log("Applied filters:", filters);
+        closeFilterModal();
+    };
 
     return(
         <View style={styles.container}>
@@ -21,9 +37,12 @@ export default function HomePageContent(){
                 </View>
 
                 <View style={styles.content}>
-                    <View style={styles.conticon}>
-                        <Image style={styles.icon} source={require('../../assets/icons/Vector.png')}></Image>
-                   </View>
+                    <TouchableOpacity onPress={openFilterModal}>
+                        <View style={styles.conticon}>
+                            <Image style={styles.icon} source={require('../../assets/icons/Vector.png')}></Image>
+                        </View>
+                    </TouchableOpacity>
+                        
                    
                     <View style={styles.task}>
                         <View style={styles.tasktitle}>
@@ -76,6 +95,12 @@ export default function HomePageContent(){
                 <TouchableOpacity style={styles.criar}>
                     <Text style={styles.txtcriar}>Criar Tarefa</Text>
                 </TouchableOpacity>
+
+                <FilterModal
+                    visible={isFilterModalVisible}
+                    onClose={closeFilterModal}
+                    onFilter={handleApplyFilters}
+                />
             </View>
         </View>
     )
