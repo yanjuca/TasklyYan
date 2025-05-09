@@ -8,37 +8,43 @@ import { useEffect } from 'react';
 
 export default function HomeScreen() {
 
+  const [userEmail, setUserEmail] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [tarefas, setTarefas] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
 
-  const salvarTarefas =  async (dados) => {
+  const salvarTarefas = async (dados, email) => {
     try {
-      await AsyncStorage.setItem('tarefas', JSON.stringify(dados))
+      await AsyncStorage.setItem(`tarefas_${email}`, JSON.stringify(dados));
     } catch (error) {
-      Alert.alert("erro ao salvar", error)
+      Alert.alert("Erro ao salvar tarefas", error.message);
     }
-  }
-
-  const carregarTarefas = async () =>{
-    try {
-    const dadosSalvos = await AsyncStorage.getItem('tarefas');
-    if (dadosSalvos) {
-      setTarefas(JSON.parse(dadosSalvos));
-    }
-  } catch (erro) {
-    console.log('Erro ao carregar:', erro);
-  }
-  }
-
-  const handleCriarTarefa =  async (novaTarefa) => {
-    const novasTarefas = ([...tarefas, novaTarefa]);
-    setTarefas(novasTarefas);
-    await salvarTarefas(novasTarefas);
   };
 
-  useEffect(() => {
-  carregarTarefas();
+  const carregarTarefas = async (email) => {
+    try {
+      const dadosSalvos = await AsyncStorage.getItem(`tarefas_${email}`);
+      if (dadosSalvos) {
+        setTarefas(JSON.parse(dadosSalvos));
+      }
+    } catch (erro) {
+      console.log('Erro ao carregar tarefas:', erro);
+    }
+  };
+
+  const handleCriarTarefa = async (novaTarefa) => {
+  const novasTarefas = [...tarefas, novaTarefa];
+  setTarefas(novasTarefas);
+  await salvarTarefas(novasTarefas, userEmail);
+};
+
+ useEffect(() => {
+  const buscarEmail = async () => {
+    const email = await AsyncStorage.getItem('loggedUserEmail');
+    setUserEmail(email);
+    if (email) carregarTarefas(email); // Carrega tarefas do usuário específico
+  };
+  buscarEmail();
 }, []);
 
   const toggleCheck = (taskId) => {

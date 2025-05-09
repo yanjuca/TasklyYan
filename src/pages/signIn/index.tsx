@@ -17,6 +17,8 @@ export default function App() {
 
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [isCSenhaVisible, setIsCSenhaVisible] = useState(false); // Estado para alternar a visibilidade
+  
 
   
   const navigation = useNavigation();
@@ -87,13 +89,18 @@ export default function App() {
         <TextInput
           style={styles.input}
           placeholder="Digite sua senha"
-          secureTextEntry
+          secureTextEntry={!isCSenhaVisible}
           maxLength={8}
           autoCorrect={false}
           value={senha}
           onChangeText={setSenha}
         />
+        
+        <TouchableOpacity onPress={() => setIsCSenhaVisible(!isCSenhaVisible)}>
+          <Text>Ver Senha</Text>
+        </TouchableOpacity>
 
+        
         {/* Checkbox personalizado */}
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
