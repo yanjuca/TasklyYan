@@ -1,35 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import styles from './style';
 import { useNavigation } from '@react-navigation/native';
 
-//Modais
 import LogoutConfirmationModal from '../../components/common/LogoutConfirmationModal';
 import ToggleBiometricsModal from '../../components/common/ToggleBiometricsModal';
 import AccountDeletionModal from '../../components/common/AccountDeletionModal';
 
-// Ícones
 import UserIcon from '../../assets/icons/profileGuy.png';
 import FingerprintIcon from '../../assets/icons/fingerprint.png';
 import LogoutIcon from '../../assets/icons/fingerprint.png';
 import ChevronRightIcon from '../../assets/icons/ChevronRight.png';
-import DeleteAccIcon from '../../assets/icons/recyclebin.png'
+import DeleteAccIcon from '../../assets/icons/recyclebin.png';
 import ProfileImage from '../../assets/imgs/avatar.png';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileScreen: React.FC = () => {
-
-    
     const navigation = useNavigation();
 
-    const handleTermsAndConditionsPress = () => {
-        navigation.navigate('WebView', { url: 'https://sobreuol.noticias.uol.com.br/normas-de-seguranca-e-privacidade/en/' });
-    };
     const [isLogoutConfirmationModalVisible, setIsLogoutConfirmationModalVisible] = useState(false);
     const [isBiometricModalVisible, setIsBiometricModalVisible] = useState(false);
     const [isBiometricEnabled, setIsBiometricEnabled] = useState(false);
     const [isAccountDeletionModalVisible, setIsAccountDeletionModalVisible] = useState(false);
+    const [usuario, setUsuario] = useState({ nome: '', email: '', numero: '' });
 
     const handleEditProfilePress = () => {
         navigation.navigate('profileEdit');
@@ -43,66 +37,113 @@ const ProfileScreen: React.FC = () => {
         setIsLogoutConfirmationModalVisible(false);
     };
 
-    const handleConfirmLogout = () => {
-        console.log('Usuário saiu da conta!');
-        setIsLogoutConfirmationModalVisible(false);
-    };
+    const handleConfirmLogout = async () => {
+    try {
+        
+        await AsyncStorage.removeItem("loggedUserEmail");
+        await AsyncStorage.removeItem("loggedUserNome");
+        await AsyncStorage.removeItem("loggedUserNumero");
 
-    const handleOpenBiometricModal = () => {
-        setIsBiometricModalVisible(true);
-    };
+        
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'SingIn' }], 
+        });
+    } catch (error) {
+        console.error('Erro ao sair da conta:', error);
+        Alert.alert("Erro", "Ocorreu um erro ao deslogar.");
+    }
+};
 
-    const handleCloseBiometricModal = () => {
-        setIsBiometricModalVisible(false);
-    };
+    const handleOpenBiometricModal = () => setIsBiometricModalVisible(true);
+    const handleCloseBiometricModal = () => setIsBiometricModalVisible(false);
 
     const handleConfirmBiometricChange = (newState: boolean) => {
-        console.log('Biometria alterada para:', newState);
         setIsBiometricEnabled(newState);
         setIsBiometricModalVisible(false);
     };
 
-    const handleOpenDeleteAccountModal = () => {
-        setIsAccountDeletionModalVisible(true);
-    };
+    const handleOpenDeleteAccountModal = () => setIsAccountDeletionModalVisible(true);
+    const handleCloseDeleteAccountModal = () => setIsAccountDeletionModalVisible(false);
 
-    const handleCloseDeleteAccountModal = () => {
+   const handleConfirmDeleteAccount = async () => {
+    try {
+        
+        const emailLogado = await AsyncStorage.getItem("loggedUserEmail");
+
+        
+        if (!emailLogado) {
+            console.warn("Nenhum usuário logado.");
+            Alert.alert("Erro", "Você não está logado.");
+            return;
+        }
+
+        
+        const usuariosJson = await AsyncStorage.getItem("users");
+        const usuarios = usuariosJson ? JSON.parse(usuariosJson) : [];
+
+        
+        const usuarioIndex = usuarios.findIndex((u) => u.email === emailLogado);
+        if (usuarioIndex === -1) {
+            console.warn("Usuário não encontrado.");
+            Alert.alert("Erro", "Usuário não encontrado.");
+            return;
+        }
+
+        
+        usuarios.splice(usuarioIndex, 1);
+
+    
+        await AsyncStorage.setItem("users", JSON.stringify(usuarios));
+
+       
+        await AsyncStorage.removeItem("loggedUserEmail");
+        await AsyncStorage.removeItem("loggedUserNome");
+        await AsyncStorage.removeItem("loggedUserNumero");
+
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'SingIn' }], // Altere para o nome correto da tela de login
+        });
         setIsAccountDeletionModalVisible(false);
-    };
+        Alert.alert("Conta excluída", "Sua conta foi excluída com sucesso.")
 
-    const handleConfirmDeleteAccount = () => {
-        console.log('Conta deletada!');
-        setIsAccountDeletionModalVisible(false);
-    };
+    } catch (error) {
+        console.error("Erro ao excluir a conta:", error);
+        Alert.alert("Erro", "Ocorreu um erro ao excluir sua conta.");
+    }
+};
 
-    const [usuario, setUsuario] = useState({ nome: '', email: '', numero: '' });
 
 
 
     useEffect(() => {
         const carregarUsuario = async () => {
-          const email = await AsyncStorage.getItem("loggedUserEmail");
-          const nome = await AsyncStorage.getItem("loggedUserNome");
-          const numero = await AsyncStorage.getItem("loggedUserNumero");
-          if (email || nome || numero) {
-            setUsuario({
-              nome: nome || '',
-              email: email || '',
-              numero: numero || '',
-            });
-          }
-          
+            const email = await AsyncStorage.getItem("loggedUserEmail");
+            const nome = await AsyncStorage.getItem("loggedUserNome");
+            const numero = await AsyncStorage.getItem("loggedUserNumero");
+            if (email || nome || numero) {
+                setUsuario({
+                    nome: nome || '',
+                    email: email || '',
+                    numero: numero || '',
+                });
+            }
         };
-    
         carregarUsuario();
-      }, []);
+    }, []);
 
-    
+    const handleTermsAndConditionsPress = () => {
+        navigation.navigate('WebView', {
+            url: 'https://sobreuol.noticias.uol.com.br/normas-de-seguranca-e-privacidade/en/',
+        });
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.avatarContainer}>
-                    <Image source={ProfileImage} style={styles.avatar}/>
+                    <Image source={ProfileImage} style={styles.avatar} />
                 </View>
                 <Text style={styles.name}>{usuario.nome}</Text>
                 <Text style={styles.email}>{usuario.email}</Text>
@@ -140,16 +181,16 @@ const ProfileScreen: React.FC = () => {
                     </View>
                 </TouchableOpacity>
             </ScrollView>
-        
+
             <View style={styles.menuContainer}>
-              <TouchableOpacity style={styles.menuItem}>
-                  <Text style={styles.menuText}>Preferências</Text>
-                  <Image source={ChevronRightIcon} style={styles.menuIcon} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.menuItem} onPress={handleTermsAndConditionsPress}>
-                  <Text style={styles.menuText}>Termos e regulamentos</Text>
-                  <Image source={ChevronRightIcon} style={styles.menuIcon} />
-              </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem}>
+                    <Text style={styles.menuText}>Preferências</Text>
+                    <Image source={ChevronRightIcon} style={styles.menuIcon} />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.menuItem} onPress={handleTermsAndConditionsPress}>
+                    <Text style={styles.menuText}>Termos e regulamentos</Text>
+                    <Image source={ChevronRightIcon} style={styles.menuIcon} />
+                </TouchableOpacity>
             </View>
 
             {isLogoutConfirmationModalVisible && (
@@ -179,4 +220,5 @@ const ProfileScreen: React.FC = () => {
         </View>
     );
 };
+
 export default ProfileScreen;
