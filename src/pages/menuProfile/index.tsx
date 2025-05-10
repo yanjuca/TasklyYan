@@ -16,6 +16,18 @@ import ProfileImage from '../../assets/imgs/avatar.png';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const formatPhoneNumber = (phoneNumber: string) => {
+    if (!phoneNumber) {
+        return '';
+    }
+    const cleaned = ('' + phoneNumber).replace(/\D/g, '');
+    const match = cleaned.match(/^(\d{2})(\d{5})(\d{4})$/);
+    if (match) {
+        return `(${match[1]}) ${match[2]} - ${match[3]}`;
+    }
+    return cleaned;
+}
+
 const ProfileScreen: React.FC = () => {
     const navigation = useNavigation();
 
@@ -149,7 +161,7 @@ const ProfileScreen: React.FC = () => {
                 </View>
                 <Text style={styles.name}>{usuario.nome}</Text>
                 <Text style={styles.email}>{usuario.email}</Text>
-                <Text style={styles.phone}>{usuario.numero}</Text>
+                <Text style={styles.phone}>{formatPhoneNumber(usuario.numero)}</Text>
             </View>
 
             <ScrollView
