@@ -67,7 +67,7 @@ export default function HomeScreen() {
             style={styles.logo3}
           />
         </View>
-
+        {}
         <View style={styles.content}>
           {tarefas.length === 0 ? (
             <>

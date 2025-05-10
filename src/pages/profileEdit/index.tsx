@@ -1,13 +1,18 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import styles from './style';
 import { useNavigation } from "@react-navigation/native";
 
 import ChevronLeftIcon from '../../assets/icons/ChevronLeft.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import avatarEdit from '../avatarEdit';
 
 const ProfileEdit: React.FC = () => {
+
+    const [originalEmail, setOriginalEmail] = useState('');
+
+
     const navigation = useNavigation();
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
@@ -32,23 +37,68 @@ const ProfileEdit: React.FC = () => {
         navigation.goBack();
         console.log('Voltar pressionado');
     };
+    
+const handleContinueButton = async () => {
 
-    const handleContinueButton = () => {  
+  if (isEmailValid(email) && isFullnameValid(fullName) && isPhoneNumberValid(phoneNumber)) {
+    try {
+      const storedUsers = await AsyncStorage.getItem("users");
+      const parsedUsers = storedUsers ? JSON.parse(storedUsers) : [];
 
-        if (isEmailValid(email) && isFullnameValid(fullName) && isPhoneNumberValid(phoneNumber)) {
-          console.log('Validação passou, navegando...');
-          console.log('Dados do formulário: ', { fullName, email, phoneNumber });
-          navigation.navigate('avatarEdit', {
-            nomeCompleto: fullName,
+      const updatedUsers = parsedUsers.map((user: any) => {
+        if (user.email === originalEmail) {
+          return {
+            ...user,
+            nome: fullName,
             email: email,
             numero: phoneNumber,
-          });
-          setIsFormValid(true); // Reset o estado para o próximo envio
-        } else {
-          setIsFormValid(false); // Atualiza o estado para exibir as mensagens de erro
-          console.log('Validação falhou, não navegando.');
+          };
         }
-      };
+        return user;
+      });
+
+      await AsyncStorage.setItem("users", JSON.stringify(updatedUsers));
+      await AsyncStorage.setItem("loggedUserNome", fullName);
+      await AsyncStorage.setItem("loggedUserNumero", phoneNumber);
+      await AsyncStorage.setItem("loggedUserEmail", email); // opcional
+
+      console.log("Perfil atualizado com sucesso!");
+      setIsFormValid(true);
+
+      navigation.navigate('avatarEdit', {
+        nomeCompleto: fullName,
+        email: email,
+        numero: phoneNumber,
+      });
+    } catch (error) {
+      console.error("Erro ao atualizar perfil:", error);
+    }
+  } else {
+    setIsFormValid(false);
+    console.log('Validação falhou, não salvando.');
+  }
+};
+
+     useEffect(() => {
+  const carregarDadosUsuario = async () => {
+    const emailLogado = await AsyncStorage.getItem("loggedUserEmail");
+    const usuariosArmazenados = await AsyncStorage.getItem("users");
+
+    if (emailLogado && usuariosArmazenados) {
+      const listaUsuarios = JSON.parse(usuariosArmazenados);
+      const usuario = listaUsuarios.find((u: any) => u.email === emailLogado);
+
+      if (usuario) {
+        setFullName(usuario.nome);
+        setEmail(usuario.email);
+        setOriginalEmail(usuario.email); // aqui
+        setPhoneNumber(usuario.numero);
+      }
+    }
+  };
+
+  carregarDadosUsuario();
+}, []); 
 
 
     return (
@@ -89,6 +139,7 @@ const ProfileEdit: React.FC = () => {
                     onChangeText={setPhoneNumber}
                     placeholder="(DDD) 9 NNNN-NNNN"
                     keyboardType="phone-pad"
+                    maxLength={11}
                     />
                 {(!isFormValid && !isPhoneNumberValid(phoneNumber)) && <Text style={styles.errorText}>Error aqui</Text>}
 

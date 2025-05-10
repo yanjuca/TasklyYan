@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback  } from 'react';
 import { View, Text, Image, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import styles from './style';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 
 import LogoutConfirmationModal from '../../components/common/LogoutConfirmationModal';
 import ToggleBiometricsModal from '../../components/common/ToggleBiometricsModal';
@@ -117,7 +117,8 @@ const ProfileScreen: React.FC = () => {
 
 
 
-    useEffect(() => {
+    useFocusEffect(
+    useCallback(() => {
         const carregarUsuario = async () => {
             const email = await AsyncStorage.getItem("loggedUserEmail");
             const nome = await AsyncStorage.getItem("loggedUserNome");
@@ -131,7 +132,8 @@ const ProfileScreen: React.FC = () => {
             }
         };
         carregarUsuario();
-    }, []);
+    }, [])
+);
 
     const handleTermsAndConditionsPress = () => {
         navigation.navigate('WebView', {
