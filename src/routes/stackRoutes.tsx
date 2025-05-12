@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 
 export default function StackRouter() {
   return (    
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="SingIn">
       <Stack.Screen name="SelectionScreen" component={SelectionScreen} options={{ headerShown: false }} />
       <Stack.Screen name="SingIn" component={SingIn} options={{ headerShown: false }} />
       <Stack.Screen name="Tab" component={Tab} options={{ headerShown: false }} />
