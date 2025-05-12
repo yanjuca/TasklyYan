@@ -8,15 +8,15 @@ import LogoutConfirmationModal from '../../components/common/LogoutConfirmationM
 import ToggleBiometricsModal from '../../components/common/ToggleBiometricsModal';
 import AccountDeletionModal from '../../components/common/AccountDeletionModal';
 
-import UserIconDark from '../../assets/icons/menu/User.png';
-import UserIconLight from '../../assets/icons/menu/UserLight.png';
+import UserIconDark from '../../assets/icons/User.png';
+import UserIconLight from '../../assets/icons/UserLight.png';
 import FingerprintIconDark from '../../assets/icons/menu/FingerprintSimple.png';
 import FingerprintIconLight from '../../assets/icons/menu/FingerprintSimpleLight.png';
 import LogoutIconDark from '../../assets/icons/menu/SignOut.png';
 import LogoutIconLight from '../../assets/icons/menu/SignOutLight.png';
 import ChevronRightIcon from '../../assets/icons/ChevronRight.png'; // Este parece ser o mesmo para ambos os temas
 import DeleteAccIconDark from '../../assets/icons/menu/Trash.png';
-import DeleteAccIconLight from '../../assets/icons/menu/TrashLight.png';
+import DeleteAccIconLight from '../../assets/icons/TrashLight.png';
 import ProfileImage from '../../assets/imgs/avatar.png';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
