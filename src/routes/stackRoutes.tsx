@@ -7,6 +7,7 @@ import avatarSelect from "../pages/avatarSelect";
 import SplashScreen from "../pages/splashscreen";
 import menuProfile from "../pages/menuProfile";
 import profileEdit from "../pages/profileEdit";
+import PreferencesMenu from "../pages/preferencesMenu";
 import avatarEdit from "../pages/avatarEdit";
 import WebViewPage from '../pages/webView';
 import Tab from "../routes/index"
@@ -26,6 +27,7 @@ export default function StackRouter() {
       <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
       <Stack.Screen name="menuProfile" component={menuProfile} options={{ headerShown: false }} />
       <Stack.Screen name="profileEdit" component={profileEdit} options={{ headerShown: false }} />
+      <Stack.Screen name="PreferencesMenu" component={PreferencesMenu} options={{ headerShown: false }} />
       <Stack.Screen name="avatarEdit" component={avatarEdit} options={{ headerShown: false }} />
       <Stack.Screen name="WebView" component={WebViewPage} />
       <Stack.Screen name="HomePageContent" component={HomePageContent} options={{ headerShown: false }} />
