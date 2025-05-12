@@ -11,14 +11,14 @@ export const styles = StyleSheet.create({
   },
   txth1:{
     textAlign:"center",
-    fontWeight: 700,
+    fontFamily: 'Roboto-Bold',
     fontSize: 24,
     marginBottom: 25
   },
   txtinput:{
     borderWidth: 2,
     borderColor: '#5B3CC4',
-    borderRadius: 5,
+    borderRadius: 8,
   },
   txterro:{
     color:"red",
@@ -27,13 +27,15 @@ export const styles = StyleSheet.create({
   },
   btn:{
     backgroundColor:"#5B3CC4",
-    width:"100%"
+    width:"100%",
+    borderRadius: 8,
   },
   txtbtn:{
     paddingVertical:15,
     textAlign:"center",
     color:"white",
     borderRadius:5,
-    fontWeight:600
+    fontFamily: 'Roboto-SemiBold',
+    fontSize: 20,
   }
 }); 
