@@ -1,7 +1,14 @@
 import React from 'react';
 import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
+
 const ModalComponent = ({ visible, onClose }) => {
+
+  const navigation = useNavigation();
+
+
   return (
     <Modal
       transparent={true}
@@ -14,8 +21,8 @@ const ModalComponent = ({ visible, onClose }) => {
           <Text style={styles.modalTexth1}>Ative o Desbloqueio por Biometria</Text>
           <Text style={styles.modalText}>Use sua impressão digital para acessar seu app de tarefas com rapidez e segurança. Se preferir, você ainda poderá usar sua senha sempre que quiser.</Text>
           <View style={styles.btn}>
-            <Pressable style={styles.btnCancel}  onPress={onClose}><Text style={styles.txtCanel}>Agora não</Text></Pressable>
-            <Pressable style={styles.btnNext} onPress={onClose}><Text style={styles.txtactivate}>ATIVAR</Text></Pressable>
+            <Pressable style={styles.btnCancel}  onPress={() => navigation.navigate("avatarSelect")}><Text style={styles.txtCanel}>Agora não</Text></Pressable>
+            <Pressable style={styles.btnNext} onPress={() => navigation.navigate("avatarSelect")}><Text style={styles.txtactivate}>ATIVAR</Text></Pressable>
           </View>         
         </View>
       </View>
@@ -38,12 +45,13 @@ const styles = StyleSheet.create({
   },
   modalTexth1:{
     fontSize:18,
-    fontWeight:500,
+    fontFamily: 'Roboto-Medium',
     marginBottom:15
   },
   modalText: {
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
+    fontFamily: 'Roboto-Regular',
   },
   btn:{
     flexDirection:"row",
