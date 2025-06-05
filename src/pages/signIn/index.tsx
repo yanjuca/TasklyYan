@@ -25,7 +25,6 @@ export default function App() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleLogin = async () => {
-    // 1. Validações iniciais (mantidas do seu código)
     if (!email || !password) {
       Alert.alert("Erro", "Preencha todos os campos!");
       return;
@@ -34,13 +33,14 @@ export default function App() {
       Alert.alert('Erro', 'Login inválido');
       return;
     }
-  
+    if (password.length < 8) {
+      Alert.alert('Erro', 'Login inválido');
+      return;
+    }
 
-    setIsLoading(true); // <--- ATIVA O LOADING ANTES DE FAZER A REQUISIÇÃO
+    setIsLoading(true);
 
     try {
-      // 2. CHAMADA À API PARA LOGIN
-      // Use o authService.login que criamos!
       const response = await authService.login(email, password);
 
       console.log('Login bem-sucedido via API:', response);

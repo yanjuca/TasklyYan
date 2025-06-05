@@ -104,7 +104,7 @@ export default function HomeScreen() {
                         style={styles.logo3}
                     />
                 </View>
-                <ScrollView style={styles.content}>
+                <View style={styles.content}>
                     {tarefas.length === 0 ? (
                         <>
                             <Image
@@ -141,7 +141,7 @@ export default function HomeScreen() {
                     >
                         <Text style={styles.buttonText}>Criar Tarefa</Text>
                     </TouchableOpacity>
-                </ScrollView>
+                </View>
             </View>
         </>
     );
