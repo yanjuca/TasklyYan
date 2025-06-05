@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import createStyles from './style';
 import ModalCriarTarefa from '../../components/common/modalcriartarefa';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -104,7 +104,7 @@ export default function HomeScreen() {
                         style={styles.logo3}
                     />
                 </View>
-                <View style={styles.content}>
+                <ScrollView style={styles.content}>
                     {tarefas.length === 0 ? (
                         <>
                             <Image
@@ -141,7 +141,7 @@ export default function HomeScreen() {
                     >
                         <Text style={styles.buttonText}>Criar Tarefa</Text>
                     </TouchableOpacity>
-                </View>
+                </ScrollView>
             </View>
         </>
     );

@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { authService } from '../../services/authService';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -16,56 +16,63 @@ import { styles } from './style';
 export default function App() {
 
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [isCSenhaVisible, setIsCSenhaVisible] = useState(false); // Estado para alternar a visibilidade
-  
+  const [password, setPassword] = useState('');
+  const [isCPasswordVisible, setIsCPasswordVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  
   const navigation = useNavigation();
 
   const [rememberMe, setRememberMe] = useState(false);
 
-
   const handleLogin = async () => {
-    if (!email || !senha) {
-      Alert.alert("Preencha todos os campos!");
+    // 1. Validações iniciais (mantidas do seu código)
+    if (!email || !password) {
+      Alert.alert("Erro", "Preencha todos os campos!");
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      Alert.alert('Digite um e-mail válido');
-      return;
-    }
-    if (senha.length < 8){
-      Alert.alert('a senha precisa ter no minimo 8 caracteres')
+      Alert.alert('Erro', 'Login inválido');
       return;
     }
   
-    try {
-      const storedUsers = await AsyncStorage.getItem('users');
-      const users = storedUsers ? JSON.parse(storedUsers) : [];
-  
-      const userFound = users.find(
-        (user) => user.email === email && user.senha === senha
-      );
-      
-     
 
-      if (userFound) {
-        await AsyncStorage.setItem("loggedUserEmail", userFound.email); 
-        await AsyncStorage.setItem("loggedUserNome", userFound.nome); 
-        await AsyncStorage.setItem("loggedUserNumero", userFound.numero); 
-        navigation.navigate("Tab"); 
-        
+    setIsLoading(true); // <--- ATIVA O LOADING ANTES DE FAZER A REQUISIÇÃO
+
+    try {
+      // 2. CHAMADA À API PARA LOGIN
+      // Use o authService.login que criamos!
+      const response = await authService.login(email, password);
+
+      console.log('Login bem-sucedido via API:', response);
+
+      // A resposta da API de login é: { id_token: "...", refresh_token: "..." }
+      const idToken = response.id_token;
+      const refreshToken = response.refresh_token;
+
+      // 3. SALVAR TOKENS NO ASYNCSTORAGE
+      // Agora sim, vamos usar o AsyncStorage para o que ele serve para a API: guardar os tokens
+      if (idToken && refreshToken) {
+        await AsyncStorage.setItem('idToken', idToken);
+        await AsyncStorage.setItem('refreshToken', refreshToken);
+        // Opcional: Se a API de `GET /profile` fosse chamada aqui,
+        // você poderia pegar o nome e número diretamente do profile e salvar.
+        // Por enquanto, vamos apenas salvar os tokens.
+        Alert.alert('Sucesso', 'Login realizado!');
+        navigation.navigate("Tab"); // Redireciona para a tela principal
       } else {
-        Alert.alert("Email ou senha incorretos!");
-       
+        // Isso não deve acontecer se a API responder corretamente, mas é um fallback
+        Alert.alert('Erro', 'Resposta de login inválida da API.');
       }
-    } catch (error) {
-      console.error("Erro ao buscar usuários:", error);
-      Alert.alert("Erro interno. Tente novamente.");
+
+    } catch (error: any) { // Use 'any' aqui por enquanto se não tiver tipos definidos para 'error'
+      console.error("Erro ao fazer login na API:", error);
+      // A mensagem de erro virá do `throw new Error(...)` que colocamos em `authService.js`
+      Alert.alert("Erro no Login", error.message || "Ocorreu um erro ao tentar fazer login.");
+    } finally {
+      setIsLoading(false); // <--- DESATIVA O LOADING APÓS A REQUISIÇÃO (SEJA SUCESSO OU FALHA)
     }
   };
-  
+
   return (
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.containerLogo}>
@@ -83,30 +90,32 @@ export default function App() {
           autoCorrect={false}
           value={email}
           onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
 
         <Text style={styles.label}>Senha</Text>
         <TextInput
           style={styles.input}
           placeholder="Digite sua senha"
-          secureTextEntry={!isCSenhaVisible}
-          maxLength={8}
+          secureTextEntry={!isCPasswordVisible}
           autoCorrect={false}
-          value={senha}
-          onChangeText={setSenha}
+          value={password}
+          onChangeText={setPassword}
         />
-        
-        <TouchableOpacity onPress={() => setIsCSenhaVisible(!isCSenhaVisible)}>
+
+        <TouchableOpacity onPress={() => setIsCPasswordVisible(!isCPasswordVisible)}>
           <Text>Ver Senha</Text>
         </TouchableOpacity>
 
-        
+
         {/* Checkbox personalizado */}
         <View style={styles.checkboxContainer}>
           <TouchableOpacity
             onPress={() => setRememberMe(!rememberMe)}
             style={[
               styles.checkbox,
+              // Adicionar estilo para checkbox marcado aqui se quiser
             ]}
           >
             {rememberMe && (
@@ -116,11 +125,15 @@ export default function App() {
           <Text style={styles.namecheck}>Lembrar de mim</Text>
         </View>
 
-        <TouchableOpacity style={styles.buttonEntrar} onPress={handleLogin}>
-          <Text style={styles.textButtonWhite}>ENTRAR</Text>
+        <TouchableOpacity
+          style={styles.buttonEntrar}
+          onPress={handleLogin}
+          disabled={isLoading} // <--- DESABILITA O BOTÃO DURANTE O LOADING
+        >
+          <Text style={styles.textButtonWhite}>{isLoading ? 'Entrando...' : 'ENTRAR'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonCriar} onPress={() => navigation.navigate("SingUp")}>
+        <TouchableOpacity style={styles.buttonCriar} onPress={() => navigation.navigate("SingUp")}> {/* Atenção no 'SingUp' vs 'SignUp' */}
           <Text style={styles.textButtonPurple}>CRIAR CONTA</Text>
         </TouchableOpacity>
       </View>
