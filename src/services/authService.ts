@@ -1,4 +1,4 @@
-// services/authService.ts
+// src/services/authService.ts
 import { API_BASE_URL } from '../config';
 
 // Tipos para as respostas da API
@@ -15,10 +15,10 @@ interface LoginResponse {
 }
 
 interface RegisterResponse {
-  uid: string;
-  idToken: string;
+  uid: string; //
+  idToken: string; //
   user: {
-    id: string;
+    id: string; // O Firebase geralmente retorna 'uid' como ID do usuário, que é mapeado para 'id' aqui.
     email: string;
     name: string;
     phone_number?: string;
@@ -33,29 +33,25 @@ interface ProfileResponse {
   avatar_url?: string;
 }
 
-interface AvatarUploadResponse {
-  success: boolean;
-  avatar_url: string;
-  message: string;
-}
-
 /**
  * Função auxiliar genérica para fazer requisições à API.
  */
 async function apiRequest<T>(
-  endpoint: string, 
-  method: string = 'GET', 
-  body: any = null, 
+  endpoint: string,
+  method: string = 'GET',
+  body: any = null,
+  // isFormData foi mantido aqui para não quebrar outras chamadas se existirem,
+  // mas se você sabe que nunca usará FormData em outras requisições, pode remover.
   isFormData: boolean = false,
   token?: string
 ): Promise<T> {
   const headers: Record<string, string> = {};
-  
+
   // Adiciona token de autenticação se fornecido
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
-  
+
   // Só adiciona Content-Type se não for FormData
   if (!isFormData) {
     headers['Content-Type'] = 'application/json';
@@ -75,9 +71,10 @@ async function apiRequest<T>(
   }
 
   const fullUrl = `${API_BASE_URL}${endpoint}`;
-  
+
   console.log(`[API REQUEST] ${method} para: ${fullUrl}`);
   console.log('[API REQUEST] Body:', isFormData ? 'FormData (imagem)' : body);
+  console.log('[API REQUEST] Headers:', headers);
 
   try {
     const response = await fetch(fullUrl, config);
@@ -104,11 +101,11 @@ async function apiRequest<T>(
     return response.text() as Promise<T>;
   } catch (error: any) {
     console.error('Erro de rede:', error);
-    
+
     if (error.message.includes('Network request failed')) {
       throw new Error('Não foi possível conectar ao servidor. Verifique sua conexão.');
     }
-    
+
     throw new Error(`Problema de conexão: ${error.message}`);
   }
 }
@@ -126,24 +123,13 @@ export const authService = {
     return apiRequest('/auth/refresh', 'POST', { refreshToken });
   },
 
-  // Nova função para buscar dados do perfil (incluindo avatar)
+  // Função para buscar dados do perfil (incluindo avatar)
   getProfile: async (idToken: string): Promise<ProfileResponse> => {
     return apiRequest<ProfileResponse>('/profile', 'GET', null, false, idToken);
   },
 
-  // Nova função para upload de avatar
-  uploadAvatar: async (imageUri: string, userId: string, idToken: string): Promise<AvatarUploadResponse> => {
-    const formData = new FormData();
-    
-    // Adiciona a imagem ao FormData
-    formData.append('avatar', {
-      uri: imageUri,
-      type: 'image/jpeg',
-      name: `avatar-${userId}.jpg`,
-    } as any);
-    
-    formData.append('userId', userId);
-
-    return apiRequest<AvatarUploadResponse>('/profile/avatar', 'POST', formData, true, idToken);
+  // Nova função para selecionar avatar padrão (usará a URL do S3)
+  selectDefaultAvatar: async (userId: string, avatarUrl: string, idToken: string) => {
+    return apiRequest('/profile/set-default-avatar', 'POST', { userId, avatarUrl }, false, idToken);
   },
 };

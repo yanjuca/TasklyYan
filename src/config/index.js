@@ -1,5 +1,5 @@
 // config/index.js
-export const API_BASE_URL = 'http://15.228.170.229:3000'; // Sua API
+export const API_BASE_URL = 'http://18.231.86.136:3000'; // Sua API
 
 // Configurações do S3
 export const S3_CONFIG = {
