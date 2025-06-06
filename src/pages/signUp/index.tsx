@@ -4,7 +4,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Alert
+  Alert,
+  ActivityIndicator // Adicionado para o loading do botão
 } from "react-native";
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { styles } from "./style";
 import ModalBiometrics from "../../components/common/modalBiometrics";
+import { authService } from '../../services/authService';
 
 export default function SingUp() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -21,104 +23,90 @@ export default function SingUp() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [numero, setNumero] = useState("");
-  const [senha, setSenha] = useState("");
-  const [cSenha, setCSenha] = useState("");
+  const [password, setPassword] = useState("");
+  const [cPassword, setCPassword] = useState("");
 
   const [erroNome, setErroNome] = useState("");
   const [erroEmail, setErroEmail] = useState("");
   const [erroNumero, setErroNumero] = useState("");
-  const [erroSenha, setErroSenha] = useState("");
-  const [erroCSenha, setErroCSenha] = useState("");
+  const [erroPassword, setErroPassword] = useState("");
+  const [erroCPassword, setErroCPassword] = useState("");
 
-  const [isSenhaVisible, setIsSenhaVisible] = useState(false);
-  const [isCSenhaVisible, setIsCSenhaVisible] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isCPasswordVisible, setIsCPasswordVisible] = useState(false);
+
+  const [isLoading, setIsLoading] = useState(false); // Para desabilitar o botão durante a requisição
 
   const navigation = useNavigation();
 
-  const users = async () => {
+  const handleSignUp = async () => {
+    // Resetar erros ao iniciar uma nova tentativa
+    setErroNome("");
+    setErroEmail("");
+    setErroNumero("");
+    setErroPassword("");
+    setErroCPassword("");
+
     let hasError = false;
 
     if (nome.trim().split(" ").length < 2) {
       setErroNome("Digite seu nome e sobrenome");
       hasError = true;
-    } else {
-      setErroNome("");
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setErroEmail("Digite um e-mail válido");
       hasError = true;
-    } else {
-      setErroEmail("");
     }
 
     if (numero.replace(/\D/g, "").length < 11) {
-      setErroNumero("Digite o número com o DDD");
+      setErroNumero("Digite o número com o DDD (mínimo 11 dígitos)");
       hasError = true;
-    } else {
-      setErroNumero("");
     }
 
-    if (senha.length < 8) {
-      setErroSenha("A senha precisa ter no mínimo 8 caracteres");
+    if (password.length < 8) {
+      setErroPassword("A senha precisa ter no mínimo 8 caracteres");
       hasError = true;
-    } else {
-      setErroSenha("");
+    } else if (password.length > 8) { // Se a API for RÍGIDA em 8, mantenha. Se aceita mais, remova.
+      // Seu TextInput tem maxLength={8}. Isso já limita a entrada do usuário.
+      // Se a API aceita senhas maiores, remova o maxLength do TextInput e essa validação.
+      setErroPassword("A senha deve ter no máximo 8 caracteres");
+      hasError = true;
     }
 
-    if (senha !== cSenha) {
-      setErroCSenha("As senhas não coincidem!");
+    if (password !== cPassword) {
+      setErroCPassword("As senhas não coincidem!");
       hasError = true;
-    } else {
-      setErroCSenha("");
     }
 
     if (hasError) return;
 
+    setIsLoading(true); // ATIVA O LOADING
+
     try {
-      const storedUsers = await AsyncStorage.getItem('users');
-      const parsedUsers = storedUsers ? JSON.parse(storedUsers) : [];
+      const response = await authService.register(
+        email,
+        password,
+        nome,
+        numero
+      );
 
-      console.log(storedUsers)
+      console.log('Registro bem-sucedido via API:', response);
+      Alert.alert('Sucesso', 'Conta criada! Agora, selecione seu avatar.');
 
-      const emailExists = parsedUsers.some(user => user.email === email);
-      if (emailExists) {
-        setErroEmail("Esse e-mail já está cadastrado!");
-        return;
+      if (navigation) {
+        // Navegar para AvatarSelectionScreen passando userId e idToken
+        navigation.navigate("AvatarSelectionScreen" as never, {
+          userId: response.user.id, // Ou response.user.uid, dependendo da sua API Firebase
+          idToken: response.idToken,
+        });
       }
 
-      const newUser = {
-        id: Date.now(),
-        nome,
-        email,
-        numero,
-        senha,
-      };
-
-      const updatedUsers = [...parsedUsers, newUser];
-      await AsyncStorage.setItem('users', JSON.stringify(updatedUsers));
-
-      
-      await AsyncStorage.setItem("loggedUserEmail", email);
-      await AsyncStorage.setItem("loggedUserNome", nome);
-      await AsyncStorage.setItem("loggedUserNumero", numero);
-
-      setNome("");
-      setEmail("");
-      setNumero("");
-      setSenha("");
-      setCSenha("");
-
-      openModal();
-
-      setTimeout(() => {
-        closeModal();
-        navigation.navigate("avatarSelect");
-      }, 1500);
-
-    } catch (error) {
-      Alert.alert("Erro ao salvar dados!");
-      console.error(error);
+    } catch (error: any) {
+      console.error('Erro ao registrar na API:', error);
+      Alert.alert('Erro no Registro', error.message || 'Ocorreu um erro ao tentar registrar.');
+    } finally {
+      setIsLoading(false); // DESATIVA O LOADING SEMPRE
     }
   };
 
@@ -142,6 +130,8 @@ export default function SingUp() {
           placeholder="example@example.com"
           value={email}
           onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
         />
         <Text style={styles.txterro}>{erroEmail}</Text>
 
@@ -160,29 +150,35 @@ export default function SingUp() {
         <TextInput
           style={styles.txtinput}
           placeholder="* * * * * * * *"
-          value={senha}
-          onChangeText={setSenha}
-          secureTextEntry={!isCSenhaVisible}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!isPasswordVisible}
           maxLength={8}
-        />       
-        <Text style={styles.txterro}>{erroSenha}</Text>
+        />
+        <Text style={styles.txterro}>{erroPassword}</Text>
 
         <Text style={styles.label}>Confirmar Senha</Text>
         <TextInput
           style={styles.txtinput}
           placeholder="* * * * * * * *"
-          value={cSenha}
-          onChangeText={setCSenha}
-          secureTextEntry={!isCSenhaVisible}
+          value={cPassword}
+          onChangeText={setCPassword}
+          secureTextEntry={!isCPasswordVisible}
           maxLength={8}
         />
-        <TouchableOpacity onPress={() => setIsCSenhaVisible(!isCSenhaVisible)}>
-          <Text>{isCSenhaVisible ? "Ocultar senha" : "Ver senha"}</Text>
+        <TouchableOpacity onPress={() => setIsCPasswordVisible(!isCPasswordVisible)}>
+          <Text>{isCPasswordVisible ? "Ocultar senha" : "Ver senha"}</Text>
         </TouchableOpacity>
-        <Text style={styles.txterro}>{erroCSenha}</Text>
+        <Text style={styles.txterro}>{erroCPassword}</Text>
 
-        <TouchableOpacity style={styles.btn} onPress={users}>
-          <Text style={styles.txtbtn}>CRIAR CONTA</Text>
+        <TouchableOpacity
+          style={styles.btn}
+          onPress={handleSignUp}
+          disabled={isLoading}
+        >
+          <Text style={styles.txtbtn}>
+            {isLoading ? <ActivityIndicator color="#fff" /> : 'CRIAR CONTA'}
+          </Text>
         </TouchableOpacity>
 
         <ModalBiometrics visible={isModalVisible} onClose={closeModal} />
