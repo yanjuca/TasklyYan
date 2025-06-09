@@ -13,7 +13,6 @@ import LogoutConfirmationModal from '../../components/common/LogoutConfirmationM
 import ToggleBiometricsModal from '../../components/common/ToggleBiometricsModal';
 import AccountDeletionModal from '../../components/common/AccountDeletionModal';
 
-// Seus ícones de acordo com o tema
 import UserIconDark from '../../assets/icons/User.png';
 import UserIconLight from '../../assets/icons/UserLight.png';
 import FingerprintIconDark from '../../assets/icons/menu/FingerprintSimple.png';
@@ -37,13 +36,12 @@ const formatPhoneNumber = (phoneNumber?: string | null) => {
   return cleaned;
 };
 
-// **CORREÇÃO AQUI**: A interface deve refletir a resposta do backend GET /profile
 interface UserProfile {
-    uid: string; // O backend retorna 'uid' para o ID do usuário
-    name: string; // O backend retorna 'name'
+    uid: string;
+    name: string;
     email: string;
-    phone_number?: string; // O backend retorna 'phone_number'
-    picture?: string; // O backend retorna 'picture' (ex: "avatar_2")
+    phone_number?: string;
+    picture?: string;
 }
 
 const ProfileScreen: React.FC = () => {
@@ -119,7 +117,7 @@ const ProfileScreen: React.FC = () => {
   };
 
   const handleOpenDeleteAccountModal = () => setIsAccountDeletionModalVisible(true);
-  const handleCloseDeleteAccountModal = () => setIsAccountDeletionModalVisible(false); // Corrigido aqui
+  const handleCloseDeleteAccountModal = () => setIsAccountDeletionModalVisible(false);
 
   const handleConfirmDeleteAccount = async () => {
     try {
@@ -130,11 +128,8 @@ const ProfileScreen: React.FC = () => {
         return;
       }
 
-      // TODO: Implementar a chamada ao backend para exclusão da conta
-      // O README mostra DELETE /profile/delete-account
-       await authService.deleteAccount(idToken); // Você precisará implementar essa função no authService
+       await authService.deleteAccount(idToken);
 
-      // --- As linhas abaixo só devem ser executadas APÓS a confirmação do backend ---
       await AsyncStorage.multiRemove(["idToken", "refreshToken", "loggedUserEmail", "loggedUserNome", "loggedUserNumero"]);
 
       navigation.reset({
@@ -161,18 +156,15 @@ const ProfileScreen: React.FC = () => {
         return;
       }
 
-      // A authService.getProfile já deve estar configurada para chamar GET /profile
       const profileData = await authService.getProfile(idToken);
       console.log('Dados do perfil recebidos:', profileData);
 
-      // **CORREÇÃO AQUI**: Mapear os dados recebidos do backend para o estado do usuário
-      // e construir a URL do avatar.
       setUsuario({
         uid: profileData.uid,
         name: profileData.name || 'Nome não definido',
         email: profileData.email || 'Email não definido',
         phone_number: profileData.phone_number || '',
-        picture: profileData.picture || S3_CONFIG.DEFAULT_AVATAR_ID, // Usar o ID do avatar, não a URL completa
+        picture: profileData.picture || S3_CONFIG.DEFAULT_AVATAR_ID,
       });
 
     } catch (error: any) {
@@ -182,9 +174,9 @@ const ProfileScreen: React.FC = () => {
     } finally {
       setLoadingProfile(false);
     }
-  }, []); // Dependências vazias pois loadUserProfile agora é envolvida por useCallback
+  }, []);
 
-  useFocusEffect(loadUserProfile); // Chama loadUserProfile quando a tela é focada
+  useFocusEffect(loadUserProfile);
 
   const handleTermsAndConditionsPress = () => {
     navigation.navigate('WebView' as never, {
@@ -212,24 +204,23 @@ const ProfileScreen: React.FC = () => {
     );
   }
 
-  // **CORREÇÃO AQUI**: Lógica para determinar a URL FINAL do avatar
   const avatarToDisplay = getS3FullAvatarUrl(usuario.picture)
-    ? `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/${usuario.picture}.png` // Constrói a URL usando o ID do avatar
-    : `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/default_avatar.png`; // Fallback para um avatar padrão no S3 se 'picture' não existir
+    ? `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/${usuario.picture}.png`
+    : `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/default_avatar.png`;
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.avatarContainer}>
           <Image
-            source={{ uri: avatarToDisplay }} // Usar a URL construída
+            source={{ uri: avatarToDisplay }}
             style={styles.avatar}
             onError={(e) => console.log('Erro ao carregar avatar na ProfileScreen:', e.nativeEvent.error)}
           />
         </View>
-        <Text style={styles.name}>{usuario.name}</Text> {/* Usar usuario.name */}
+        <Text style={styles.name}>{usuario.name}</Text> {}
         <Text style={styles.email}>{usuario.email}</Text>
-        <Text style={styles.phone}>{formatPhoneNumber(usuario.phone_number)}</Text> {/* Usar usuario.phone_number */}
+        <Text style={styles.phone}>{formatPhoneNumber(usuario.phone_number)}</Text> {}
       </View>
 
       <ScrollView

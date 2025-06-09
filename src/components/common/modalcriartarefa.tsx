@@ -6,9 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Keyboard,
 } from 'react-native';
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Ajuste o caminho se necessário
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
 
 export default function ModalCriarTarefa({ visible, onClose, onCreate }) {
   const [titulo, setTitulo] = useState('');
@@ -138,7 +137,7 @@ export default function ModalCriarTarefa({ visible, onClose, onCreate }) {
             placeholder="Ex: bater o ponto"
             style={modalStyles.input}
             returnKeyType="next"
-            onSubmitEditing={() => { /* Poderia focar no próximo input aqui */ }}
+            onSubmitEditing={() => {  }}
             placeholderTextColor={theme.secondaryText}
           />
 

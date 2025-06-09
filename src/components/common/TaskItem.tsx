@@ -8,13 +8,15 @@ const { width } = Dimensions.get('window');
 const SWIPE_THRESHOLD = -width * 0.25;
 
 export default function TaskItem({ tarefa, index, toggleCheck, onDelete, styles }) {
-  const { theme } = useTheme();
+  const { theme, currentThemeName } = useTheme();
   const baseStyles = createStyles(theme);
 
   const translateX = useRef(new Animated.Value(0)).current;
 
   const renderRightActions = () => {
-    const trashIcon = theme.dark ? require('../../assets/icons/Trash.png') : require('../../assets/icons/TrashLight.png');
+    const trashIcon = currentThemeName === 'dark'
+      ? require('../../assets/icons/Trash.png') // Ícone para o modo escuro
+      : require('../../assets/icons/TrashLight.png'); // Ícone para o modo claro
 
     const scale = translateX.interpolate({
       inputRange: [SWIPE_THRESHOLD * 2, 0],
@@ -72,12 +74,7 @@ export default function TaskItem({ tarefa, index, toggleCheck, onDelete, styles 
       <PanGestureHandler
         onGestureEvent={onGestureEvent}
         onHandlerStateChange={onHandlerStateChange}
-        // MODIFICAÇÃO AQUI:
-        activeOffsetX={[-10, 10]} // Permite pequenos movimentos horizontais para iniciar o gesto
-        // failOffsetX e minDist foram removidos/ajustados.
-        // Se você quiser que o gesto falhe se for muito vertical, use failOffsetY.
-        // Por exemplo, para um swipe horizontal, você pode querer:
-        // failOffsetY={[-5, 5]} // Falha se o movimento vertical for maior que 5px em qualquer direção.
+        activeOffsetX={[-10, 10]}
       >
         <Animated.View
           style={[

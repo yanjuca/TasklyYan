@@ -8,8 +8,7 @@ import { S3_CONFIG, getS3FullAvatarUrl } from '../../config';
 import { authService } from '../../services/authService';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-// Importe o novo componente TaskItem
-import TaskItem from '../../components/common/TaskItem'; // Caminho para o novo componente
+import TaskItem from '../../components/common/TaskItem';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
@@ -41,13 +40,8 @@ export default function HomeScreen() {
       const dadosSalvos = await AsyncStorage.getItem(`tarefas_${email}`);
       if (dadosSalvos) {
         const tarefasCarregadas = JSON.parse(dadosSalvos);
-        // MODIFICAÇÃO AQUI: Garante que todas as tarefas tenham um ID
         const tarefasComId = tarefasCarregadas.map(tarefa => ({
           ...tarefa,
-          // Se a tarefa não tem um ID, gera um.
-          // Usamos `Date.now().toString() + Math.random().toString().substring(2, 8)`
-          // para ter uma alta chance de gerar IDs únicos mesmo para tarefas antigas
-          // que possam ter sido criadas no mesmo milissegundo.
           id: tarefa.id || Date.now().toString() + Math.random().toString().substring(2, 8)
         }));
         setTarefas(tarefasComId);
@@ -63,12 +57,11 @@ export default function HomeScreen() {
   };
 
   const handleCriarTarefa = async (novaTarefa) => {
-    // MODIFICAÇÃO AQUI: Adiciona um ID único à nova tarefa antes de adicioná-la à lista
     const tarefaComId = {
       ...novaTarefa,
-      id: Date.now().toString(), // Gera um ID único baseado no timestamp atual
+      id: Date.now().toString(),
     };
-    const novasTarefas = [...tarefas, tarefaComId]; // Adicione a tarefa com o ID
+    const novasTarefas = [...tarefas, tarefaComId];
     setTarefas(novasTarefas);
     await salvarTarefas(novasTarefas, userEmail);
     setModalVisible(false);
@@ -125,7 +118,6 @@ export default function HomeScreen() {
         {
           text: "Excluir",
           onPress: async () => {
-            // AQUI JÁ ESTAVA CORRETO, pois filtra pelo idTarefa
             const novasTarefas = tarefas.filter(tarefa => tarefa.id !== idTarefa);
             setTarefas(novasTarefas);
             await salvarTarefas(novasTarefas, userEmail);
@@ -176,7 +168,7 @@ export default function HomeScreen() {
             <ScrollView>
               {tarefas.map((tarefa, index) => (
                 <TaskItem
-                  key={tarefa.id} // MODIFICAÇÃO AQUI: Garante que a key é o ID único da tarefa
+                  key={tarefa.id} 
                   tarefa={tarefa}
                   index={index}
                   theme={theme}

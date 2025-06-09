@@ -68,7 +68,7 @@ const getStyles = (theme: ThemeColors) => {
       borderRadius: 50,
       overflow: 'hidden',
       borderWidth: 3,
-      backgroundColor: '#000', // Mantive preto.
+      backgroundColor: '#000',
     },
     avatarImage: {
       width: 90,

@@ -8,7 +8,7 @@ import {
   ActivityIndicator
 } from "react-native";
 
-import AsyncStorage from '@react-native-async-storage/async-storage'; // Mantenha, vamos usá-lo!
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { useNavigation } from "@react-navigation/native";
 
 import { styles } from "./style";
@@ -48,7 +48,6 @@ export default function SingUp() {
 
     let hasError = false;
 
-    // --- Validações ---
     if (nome.trim().split(" ").length < 2) {
       setErroNome("Digite seu nome e sobrenome");
       hasError = true;
@@ -59,13 +58,11 @@ export default function SingUp() {
       hasError = true;
     }
 
-    // Apenas dígitos, com 11 caracteres (DDD + 9 + 8 dígitos)
     if (numero.replace(/\D/g, "").length !== 11) {
       setErroNumero("Digite o número com o DDD (ex: 849xxxxxxxx)");
       hasError = true;
     }
 
-    // CORREÇÃO: Lógica de validação de senha
     if (password.length < 8) {
       setErroPassword("A senha precisa ter no mínimo 8 caracteres");
       hasError = true;
@@ -104,7 +101,7 @@ export default function SingUp() {
         if (loginResponse.user.phone_number) {
             await AsyncStorage.setItem('loggedUserNumero', loginResponse.user.phone_number);
         }
-        await AsyncStorage.setItem('loggedUserId', loginResponse.user.id); // Guardar o ID do usuário
+        await AsyncStorage.setItem('loggedUserId', loginResponse.user.id);
       } else {
         await AsyncStorage.setItem('loggedUserNome', nome);
         await AsyncStorage.setItem('loggedUserEmail', email);
@@ -182,7 +179,7 @@ export default function SingUp() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!isPasswordVisible}
-          maxLength={8} // Mantenha se a senha deve ter EXATAMENTE 8. Se for MÍNIMO 8, remova este maxLength e ajuste a validação.
+          maxLength={8}
         />
         <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
             <Text>{isPasswordVisible ? "Ocultar senha" : "Ver senha"}</Text>
@@ -196,7 +193,7 @@ export default function SingUp() {
           value={cPassword}
           onChangeText={setCPassword}
           secureTextEntry={!isCPasswordVisible}
-          maxLength={8} // Mantenha se a senha deve ter EXATAMENTE 8. Se for MÍNIMO 8, remova este maxLength e ajuste a validação.
+          maxLength={8}
         />
         <TouchableOpacity onPress={() => setIsCPasswordVisible(!isCPasswordVisible)}>
           <Text>{isCPasswordVisible ? "Ocultar senha" : "Ver senha"}</Text>

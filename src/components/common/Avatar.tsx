@@ -1,4 +1,3 @@
-// components/Avatar.tsx
 import React from 'react';
 import { Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { S3_CONFIG } from '../config';
@@ -18,18 +17,15 @@ const Avatar: React.FC<AvatarProps> = ({
   onPress,
   editable = false
 }) => {
-  // Determina qual URL usar para o avatar
   const getAvatarSource = () => {
     if (avatarUrl) {
       return { uri: avatarUrl };
     }
     
     if (userId) {
-      // Constrói URL do S3 baseada no userId
       return { uri: `${S3_CONFIG.BASE_URL}${S3_CONFIG.AVATARS_PATH}/user-${userId}.jpg` };
     }
     
-    // Avatar padrão
     return { uri: S3_CONFIG.DEFAULT_AVATAR };
   };
 
@@ -40,7 +36,6 @@ const Avatar: React.FC<AvatarProps> = ({
         style={[styles.avatar, { width: size, height: size }]}
         onError={(error) => {
           console.log('Erro ao carregar avatar:', error);
-          // Em caso de erro, você pode definir uma fonte alternativa aqui
         }}
       />
       {editable && (

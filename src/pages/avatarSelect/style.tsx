@@ -27,35 +27,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    gap: 20, // Espaçamento entre os avatares (React Native 0.71+)
+    gap: 20,
     marginBottom: 40,
   },
   avatarButton: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    borderWidth: 2, // Borda padrão
+    borderWidth: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden', // Garante que a imagem não saia do círculo
+    overflow: 'hidden',
   },
   avatarImage: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
   },
-  // ESTILO PARA AVATAR SELECIONADO
   selectedAvatarOutline: {
-    borderWidth: 1, // Aumenta a borda para indicar seleção
-    // A cor da borda já vem de avatar.borderColor
+    borderWidth: 1,
   },
-  // ESTILO PARA AVATAR NÃO SELECIONADO (pode adicionar opacidade ou escala, por exemplo)
   deselectedAvatarImage: {
-    opacity: 0.7, // Torna avatares não selecionados um pouco mais opacos
-    transform: [{ scale: 1.1 }], // Diminui um pouco os não selecionados
+    opacity: 0.7,
+    transform: [{ scale: 1.1 }],
   },
   confirmButton: {
-    backgroundColor: '#5B3CC4', // Cor do seu botão
+    backgroundColor: '#5B3CC4',
     paddingVertical: 13,
     paddingHorizontal: 30,
     borderRadius: 8,

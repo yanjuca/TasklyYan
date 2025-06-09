@@ -45,31 +45,23 @@ export default function App() {
 
       console.log('Login bem-sucedido via API:', response);
 
-      // A resposta da API de login é: { id_token: "...", refresh_token: "..." }
       const idToken = response.id_token;
       const refreshToken = response.refresh_token;
 
-      // 3. SALVAR TOKENS NO ASYNCSTORAGE
-      // Agora sim, vamos usar o AsyncStorage para o que ele serve para a API: guardar os tokens
       if (idToken && refreshToken) {
         await AsyncStorage.setItem('idToken', idToken);
         await AsyncStorage.setItem('refreshToken', refreshToken);
-        // Opcional: Se a API de `GET /profile` fosse chamada aqui,
-        // você poderia pegar o nome e número diretamente do profile e salvar.
-        // Por enquanto, vamos apenas salvar os tokens.
         Alert.alert('Sucesso', 'Login realizado!');
-        navigation.navigate("Tab"); // Redireciona para a tela principal
+        navigation.navigate("Tab");
       } else {
-        // Isso não deve acontecer se a API responder corretamente, mas é um fallback
         Alert.alert('Erro', 'Resposta de login inválida da API.');
       }
 
-    } catch (error: any) { // Use 'any' aqui por enquanto se não tiver tipos definidos para 'error'
+    } catch (error: any) {
       console.error("Erro ao fazer login na API:", error);
-      // A mensagem de erro virá do `throw new Error(...)` que colocamos em `authService.js`
       Alert.alert("Erro no Login", error.message || "Ocorreu um erro ao tentar fazer login.");
     } finally {
-      setIsLoading(false); // <--- DESATIVA O LOADING APÓS A REQUISIÇÃO (SEJA SUCESSO OU FALHA)
+      setIsLoading(false);
     }
   };
 
@@ -115,7 +107,6 @@ export default function App() {
             onPress={() => setRememberMe(!rememberMe)}
             style={[
               styles.checkbox,
-              // Adicionar estilo para checkbox marcado aqui se quiser
             ]}
           >
             {rememberMe && (
@@ -128,12 +119,12 @@ export default function App() {
         <TouchableOpacity
           style={styles.buttonEntrar}
           onPress={handleLogin}
-          disabled={isLoading} // <--- DESABILITA O BOTÃO DURANTE O LOADING
+          disabled={isLoading} 
         >
           <Text style={styles.textButtonWhite}>{isLoading ? '...' : 'ENTRAR'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonCriar} onPress={() => navigation.navigate("SingUp")}> {/* Atenção no 'SingUp' vs 'SignUp' */}
+        <TouchableOpacity style={styles.buttonCriar} onPress={() => navigation.navigate("SingUp")}> 
           <Text style={styles.textButtonPurple}>CRIAR CONTA</Text>
         </TouchableOpacity>
       </View>

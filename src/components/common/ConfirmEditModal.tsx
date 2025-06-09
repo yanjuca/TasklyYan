@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Importe o useTheme
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
 
 interface ConfirmEditModalProps {
   visible: boolean;

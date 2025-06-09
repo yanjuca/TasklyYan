@@ -21,7 +21,7 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         width: 85,
         height: 28,
     },
-    logo3: { // Avatar
+    logo3: { 
         width: 50,
         height: 50,
         borderRadius: 20,
@@ -64,7 +64,6 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         fontWeight: '700',
         color: theme.mainText,
     },
-    // Removido o width: 500px daqui, pois será controlado pelo PanGestureHandler
     containerTesk:{
         width: '100%',
         marginBottom: 15,
@@ -72,7 +71,7 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
     contentTesk:{
         backgroundColor: theme.secondaryBg,
         padding:15,
-        width:350, // Ocupa a largura total dentro do seu pai
+        width:350,
         borderRadius:8,
         elevation: 5,
         shadowColor: '#000',
@@ -130,7 +129,7 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         height: 24,
         borderRadius: 12,
         borderWidth: 2,
-        borderColor: '#B58B46', // Cor fixa, ou mude para theme.primary se quiser dinâmico
+        borderColor: '#B58B46', 
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'transparent',
@@ -152,13 +151,12 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         alignItems:"center",
     },
 
-    // NOVOS ESTILOS PARA O SWIPE
     taskItemWrapper: {
-      width: '100%', // Ocupa a largura total do seu pai
-      marginBottom: 15, // Mantenha o espaçamento entre os itens
-      justifyContent: 'center', // Para centralizar o botão de exclusão verticalmente
-      overflow: 'hidden', // Importante para que o botão de exclusão não vaze as bordas arredondadas do card
-      borderRadius: 8, // Arredonda as bordas do wrapper para combinar com o card
+      width: '100%', 
+      marginBottom: 15,
+      justifyContent: 'center', 
+      overflow: 'hidden',
+      borderRadius: 8,
     },
     swipeableAction: {
       position: 'absolute',
@@ -167,15 +165,13 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
       bottom: 0,
       width: '30%', 
       justifyContent: 'center',
-      alignItems: 'flex-end', // Alinha o ícone à direita
-      paddingRight: 20, // Espaçamento do ícone à direita
-      // borderRadius: 8, // Já está no taskItemWrapper
-      // overflow: 'hidden', // Já está no taskItemWrapper
+      alignItems: 'flex-end',
+      paddingRight: 20,
     },
     trashIcon: {
       width: 30,
       height: 30,
-      tintColor: 'white', // Cor do ícone da lixeira, pode ser uma cor do tema se preferir
+      tintColor: 'white',
     },
 });
 
