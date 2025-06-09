@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Ajuste o caminho se necessário
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
 
 interface LogoutConfirmationModalProps {
   isVisible: boolean;

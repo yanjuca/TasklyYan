@@ -21,7 +21,7 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         width: 85,
         height: 28,
     },
-    logo3: { // Avatar
+    logo3: { 
         width: 50,
         height: 50,
         borderRadius: 20,
@@ -65,13 +65,13 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         color: theme.mainText,
     },
     containerTesk:{
-        width:"100%",
+        width: '100%',
         marginBottom: 15,
     },
     contentTesk:{
         backgroundColor: theme.secondaryBg,
         padding:15,
-        width:"100%",
+        width:350,
         borderRadius:8,
         elevation: 5,
         shadowColor: '#000',
@@ -121,14 +121,15 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         backgroundColor: theme.primary,
         color: theme.primaryLight,
         fontWeight: '400',
-        fontSize:16
+        fontSize:16,
+        textAlign: 'center',
     },
     checkContainer: {
         width: 24,
         height: 24,
         borderRadius: 12,
         borderWidth: 2,
-        borderColor: '#B58B46',
+        borderColor: '#B58B46', 
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'transparent',
@@ -148,7 +149,30 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         flexDirection:"row",
         justifyContent:"space-between",
         alignItems:"center",
-    }
+    },
+
+    taskItemWrapper: {
+      width: '100%', 
+      marginBottom: 15,
+      justifyContent: 'center', 
+      overflow: 'hidden',
+      borderRadius: 8,
+    },
+    swipeableAction: {
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: '30%', 
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+      paddingRight: 20,
+    },
+    trashIcon: {
+      width: 30,
+      height: 30,
+      tintColor: 'white',
+    },
 });
 
 export default createStyles;

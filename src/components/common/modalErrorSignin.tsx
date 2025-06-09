@@ -1,8 +1,7 @@
 import React from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Ajuste o caminho se necessário
-
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
 interface ModalErroProps {
   visible: boolean;
   onClose: () => void;
@@ -54,15 +53,6 @@ export const ModalErro: React.FC<ModalErroProps> = ({ visible, onClose }) => {
       color: theme.primary,
       fontWeight: 'bold',
       fontSize: 15,
-    },
-    buttonCriar: { // Mantenha este estilo se você realmente precisa dele, mas parece não ter texto
-      // backgroundColor: 'blue', // Adicione uma cor de fundo para visualização se necessário
-      // padding: 10,
-      // borderRadius: 5,
-    },
-    buttonCriarText: {
-      // color: 'white',
-      // fontWeight: 'bold',
     },
   });
 

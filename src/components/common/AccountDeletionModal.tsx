@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Importe o useTheme
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
 
 interface AccountDeletionModalProps {
   isVisible: boolean;
@@ -13,17 +13,17 @@ const AccountDeletionModal: React.FC<AccountDeletionModalProps> = ({
   onCancel,
   onConfirm,
 }) => {
-  const { theme } = useTheme(); // Obtenha o tema do contexto
+  const { theme } = useTheme();
 
-  const styles = StyleSheet.create({ // Defina os estilos aqui dentro
+  const styles = StyleSheet.create({
     modalContainer: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(17, 24, 39, 0.7)', // Cor padrão, pode manter assim
+      backgroundColor: 'rgba(17, 24, 39, 0.7)',
     },
     modalContent: {
-      backgroundColor: theme.secondaryBg, // Use a cor do tema
+      backgroundColor: theme.secondaryBg,
       borderRadius: 12,
       padding: 25,
       width: '85%',
@@ -33,11 +33,11 @@ const AccountDeletionModal: React.FC<AccountDeletionModalProps> = ({
       fontSize: 18,
       fontFamily: 'Roboto-Medium',
       marginBottom: 8,
-      color: theme.mainText, // Use a cor do tema
+      color: theme.mainText,
     },
     modalText: {
       fontSize: 16,
-      color: theme.mainText, // Use a cor do tema
+      color: theme.mainText,
       textAlign: 'justify',
       marginBottom: 15,
       fontFamily: 'Roboto-Regular',
@@ -56,21 +56,21 @@ const AccountDeletionModal: React.FC<AccountDeletionModalProps> = ({
       marginHorizontal: 0,
     },
     cancelButton: {
-      backgroundColor: theme.secondaryBg, // Use a cor do tema
+      backgroundColor: theme.secondaryBg, 
       borderColor: theme.primary,
       borderWidth: 2,
     },
     confirmButton: {
-      backgroundColor: theme.error, // Use a cor do tema
+      backgroundColor: theme.error, 
       paddingHorizontal: 35,
     },
     buttonText: {
-      color: theme.secondaryBg, // Use a cor do tema
+      color: theme.secondaryBg, 
       fontFamily: 'Roboto-Medium',
       fontSize: 18,
     },
     cancelButtonText: {
-      color: theme.primary, // Use a cor do tema
+      color: theme.primary, 
       fontFamily: 'Roboto-Medium',
     },
   });

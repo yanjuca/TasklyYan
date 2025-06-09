@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { ThemeColors } from '../../pages/preferencesMenu/themeContext'; // Importe a interface ThemeColors
+import { ThemeColors } from '../../pages/preferencesMenu/themeContext';
 
 const getStyles = (theme: ThemeColors) => {
   return StyleSheet.create({
@@ -51,7 +51,6 @@ const getStyles = (theme: ThemeColors) => {
       color: theme.mainText,
     },
 
-    // MODAL
     modalOverlay: {
       flex: 1,
       backgroundColor: 'rgba(0,0,0,0.5)',

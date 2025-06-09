@@ -22,7 +22,6 @@ export default function HomePageContent(){
     };
 
     const handleApplyFilters = (filters: any) => {
-        // Here you will implement the logic to filter your tasks based on the 'filters'
         console.log("Applied filters:", filters);
         closeFilterModal();
     };

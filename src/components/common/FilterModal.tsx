@@ -8,7 +8,7 @@ import {
   Image,
   TextInput,
 } from 'react-native';
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Importe o useTheme
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
 
 interface FilterModalProps {
   visible: boolean;
@@ -68,7 +68,6 @@ const FilterModal: React.FC<FilterModalProps> = ({ visible, onClose, onFilter })
     }
   };
 
-  // Lógica para dividir as tags em colunas
   const column1 = availableTags.slice(0, Math.min(2, availableTags.length));
   const remainingTags = availableTags.slice(2);
   const column2 = remainingTags;

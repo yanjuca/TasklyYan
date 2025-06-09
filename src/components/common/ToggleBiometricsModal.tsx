@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Caminho corrigido
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
 
 interface BiometricToggleModalProps {
     isVisible: boolean;
@@ -15,7 +15,7 @@ const BiometricToggleModal: React.FC<BiometricToggleModalProps> = ({
     onCancel,
     onConfirm,
 }) => {
-    const { theme } = useTheme(); // Utilize o hook para acessar o tema atual
+    const { theme } = useTheme();
 
     const modalTitle = isBiometricEnabled ? "Desativar Biometria?" : "Ativar Biometria?";
     const modalText = isBiometricEnabled
@@ -38,7 +38,7 @@ const BiometricToggleModal: React.FC<BiometricToggleModalProps> = ({
             animationType="fade"
             onRequestClose={onCancel}
         >
-            <View style={styles.modalContainer}> {/* backgroundColor fixo aqui */}
+            <View style={styles.modalContainer}> {}
                 <View style={[styles.modalContent, modalContentBackgroundColor]}>
                     <Text style={[styles.modalTitle, textColor]}>{modalTitle}</Text>
                     <Text style={[styles.modalText, textColor]}>{modalText}</Text>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(17, 24, 39, 0.7)', // Mantendo o backgroundColor fixo
+        backgroundColor: 'rgba(17, 24, 39, 0.7)',
     },
     modalContent: {
         borderRadius: 12,

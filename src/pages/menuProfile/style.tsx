@@ -80,7 +80,7 @@ const createStyles = (theme) => StyleSheet.create({
     marginBottom: 15,
   },
   menuContainer: {
-    marginBottom: 90,
+    marginBottom: 10,
   },
   menuItem: {
     alignSelf: 'center',

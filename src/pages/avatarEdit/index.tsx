@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Importe o useTheme
-import getStyles from './style'; // Importe a função getStyles
+import { useTheme } from '../../pages/preferencesMenu/themeContext'; 
+import getStyles from './style';
 import AvatarImage from '../../assets/imgs/avatar.png';
 import ConfirmEditModal from '../../components/common/ConfirmEditModal';
 
@@ -18,15 +18,15 @@ const AvatarSelectionScreen: React.FC = () => {
   const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
   const navigation = useNavigation();
-  const { theme } = useTheme(); // Obtenha o tema do contexto
-  const styles = getStyles(theme); // Obtenha os estilos com o tema
+  const { theme } = useTheme();
+  const styles = getStyles(theme); 
 
   const avatars: Avatar[] = [
     { id: 1, imageUrl: AvatarImage, borderColor: theme.primary },
     { id: 2, imageUrl: AvatarImage, borderColor: theme.primaryLight },
     { id: 3, imageUrl: AvatarImage, borderColor: theme.secondaryAccent },
     { id: 4, imageUrl: AvatarImage, borderColor: theme.error },
-    { id: 5, imageUrl: AvatarImage, borderColor: '#B58B46' }, // Cor customizada, mantenho como está
+    { id: 5, imageUrl: AvatarImage, borderColor: '#B58B46' },
   ];
 
   const handleBackButton = () => {
@@ -92,7 +92,7 @@ const AvatarSelectionScreen: React.FC = () => {
         visible={isConfirmationModalVisible}
         onRequestClose={() => {
           setIsConfirmationModalVisible(false);
-          navigation.pop(2); // Opcional: Voltar para a tela anterior ao fechar o modal
+          navigation.pop(2);
         }}
       />
     </View>

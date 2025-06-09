@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, View, Text, Pressable, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Ajuste o caminho se necessário
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
 
 const ModalComponent = ({ visible, onClose }) => {
   const navigation = useNavigation();

@@ -1,79 +1,145 @@
-import { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
-import styles from './style';
-import AvatarImage from '../../assets/imgs/avatar.png';
+// src/pages/avatarSelect/index.tsx
 
-import { useNavigation } from '@react-navigation/native';
+import { useState, useEffect } from 'react'; // Adicionar useEffect
+import { View, Text, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native';
+import styles from './style';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
+
+import { S3_CONFIG } from '../../config';
+import { authService } from '../../services/authService';
+
+type RootStackParamList = {
+  AvatarSelectionScreen: { userId: string; idToken: string };
+  Tab: undefined;
+};
+
+type AvatarSelectionScreenRouteProp = RouteProp<RootStackParamList, 'AvatarSelectionScreen'>;
 
 interface Avatar {
-        id: number;
-        imageUrl: any;
-        borderColor: string;
+  id: number;
+  imageUrl: string;
+  borderColor: string;
 }
 
 const AvatarSelectionScreen: React.FC = () => {
-        const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
+  const navigation = useNavigation();
+  const route = useRoute<AvatarSelectionScreenRouteProp>();
+  // Não vamos mais usar userId dos params diretamente aqui, mas sim o idToken.
+  // O userId será recuperado via AsyncStorage ou se necessário, o backend pode usar o UID do token.
+  const { idToken } = route.params;
 
-        const avatars: Avatar[] = [
-                {id: 1, imageUrl: AvatarImage, borderColor: '#5B3CC4'},
-                {id: 2, imageUrl: AvatarImage, borderColor: '#E6E0F7'},
-                {id: 3, imageUrl: AvatarImage, borderColor: '#32C25B'},
-                {id: 4, imageUrl: AvatarImage, borderColor: '#E63946'},
-                {id: 5, imageUrl: AvatarImage, borderColor: '#B58B46'},
-        ];
+  const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userName, setUserName] = useState<string>(''); // Novo estado para o nome do usuário
+  const [userPhoneNumber, setUserPhoneNumber] = useState<string>(''); // Novo estado para o número do usuário
 
-        const handleAvatarPress = (id: number) => {
-                setSelectedAvatarId(id);
-        };
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const storedName = await AsyncStorage.getItem('loggedUserNome');
+        const storedPhoneNumber = await AsyncStorage.getItem('loggedUserNumero');
+        if (storedName) setUserName(storedName);
+        if (storedPhoneNumber) setUserPhoneNumber(storedPhoneNumber);
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário do AsyncStorage:', error);
+      }
+    };
+    loadUserData();
+  }, []);
 
-        const handleConfirmSelection = () => {
-                if (selectedAvatarId) {
-                        console.log('Avatar selecionado: ', selectedAvatarId);
-                        navigation.navigate("Tab");
-                }
-        }
+  const avatars: Avatar[] = [
+    { id: 1, imageUrl: `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/avatar_1.png`, borderColor: '#5B3CC4' },
+    { id: 2, imageUrl: `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/avatar_2.png`, borderColor: '#E6E0F7' },
+    { id: 3, imageUrl: `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/avatar_3.png`, borderColor: '#32C25B' },
+    { id: 4, imageUrl: `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/avatar_4.png`, borderColor: '#E63946' },
+    { id: 5, imageUrl: `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/avatar_5.png`, borderColor: '#B58B46' },
+  ];
 
-        const navigation = useNavigation();
+  const handleAvatarPress = (id: number) => {
+    setSelectedAvatarId(id);
+  };
 
-        return (
-                <View style={styles.container}>
+  const handleConfirmSelection = async () => {
+    if (!selectedAvatarId) {
+      Alert.alert("Erro", "Por favor, selecione um avatar para continuar.");
+      return;
+    }
 
-                        <View style={styles.titleContainer}>
-                                <Text style={styles.title}>SELECIONE SEU AVATAR</Text>
-                                <Text style={styles.subtitle}>(Escolha somente um.)</Text>
-                        </View>
+    // Se o nome ou número não foram carregados, o backend rejeitará.
+    // Você pode adicionar uma validação aqui, ou garantir que esses campos sempre sejam preenchidos no registro.
+    if (!userName || !userPhoneNumber) {
+        Alert.alert("Erro", "Dados do usuário (nome/número) não carregados. Tente novamente.");
+        return;
+    }
 
-                        <View style={styles.avatarContainer}>
-                                {avatars.map((avatar) => (
-                                        <TouchableOpacity
-                                        key={avatar.id}
-                                        style={[
-                                                styles.avatarButton,
-                                                {borderColor: avatar.borderColor },
-                                        ]}
-                                        onPress={() => handleAvatarPress(avatar.id)}
-                                        >
-                                                <Image
-                                                source={avatar.imageUrl}
-                                                style={[
-                                                        styles.avatarImage,
-                                                        selectedAvatarId !== avatar.id && styles.deselectedAvatarImage,
-                                                        ]}
-                                                />
-                                        </TouchableOpacity>
-                                        
-                                ))}
+    setIsLoading(true);
 
-                        </View>
+    try {
+      console.log('Enviando avatar para o backend:', {
+        selectedAvatarId: selectedAvatarId,
+        idToken: idToken,
+        name: userName, // <-- ENVIANDO NOME
+        phone_number: userPhoneNumber // <-- ENVIANDO NÚMERO
+      });
 
-                        <TouchableOpacity
-                                style={styles.confirmButton}
-                                onPress={handleConfirmSelection}
-                        >
-                                <Text style={styles.confirmButtonText}>CONFIRMAR SELEÇÃO</Text>
-                        </TouchableOpacity>
-                </View>
-        );
+      // *** MUDANÇA AQUI: Passar userName e userPhoneNumber ***
+      await authService.selectDefaultAvatar(selectedAvatarId, idToken, userName, userPhoneNumber);
+
+      Alert.alert("Sucesso", "Avatar definido com sucesso!");
+      navigation.navigate("Tab" as never);
+    } catch (error: any) {
+      console.error('Erro ao definir avatar na API:', error);
+      Alert.alert("Erro", error.message || "Não foi possível definir o avatar.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>SELECIONE SEU AVATAR</Text>
+        <Text style={styles.subtitle}>(Escolha somente um.)</Text>
+      </View>
+
+      <View style={styles.avatarContainer}>
+        {avatars.map((avatar) => (
+          <TouchableOpacity
+            key={avatar.id}
+            style={[
+              styles.avatarButton,
+              { borderColor: avatar.borderColor },
+              selectedAvatarId === avatar.id && styles.selectedAvatarOutline
+            ]}
+            onPress={() => handleAvatarPress(avatar.id)}
+            disabled={isLoading}
+          >
+            <Image
+              source={{ uri: avatar.imageUrl }}
+              style={[
+                styles.avatarImage,
+                selectedAvatarId !== avatar.id && styles.deselectedAvatarImage,
+              ]}
+              onError={(e) => console.log('Erro ao carregar avatar do S3:', e.nativeEvent.error)}
+            />
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      <TouchableOpacity
+        style={styles.confirmButton}
+        onPress={handleConfirmSelection}
+        disabled={isLoading || selectedAvatarId === null}
+      >
+        {isLoading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.confirmButtonText}>CONFIRMAR SELEÇÃO</Text>
+        )}
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 export default AvatarSelectionScreen;
