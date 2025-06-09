@@ -1,7 +1,5 @@
-// src/services/authService.ts
 import { API_BASE_URL } from '../config';
 
-// Tipos para as respostas da API
 interface LoginResponse {
   id_token: string;
   refresh_token: string;
@@ -15,44 +13,39 @@ interface LoginResponse {
 }
 
 interface RegisterResponse {
-  uid: string; //
-  idToken: string; //
+  uid: string;
+  idToken: string;
   user: {
-    id: string; // O Firebase geralmente retorna 'uid' como ID do usuário, que é mapeado para 'id' aqui.
+    id: string;
     email: string;
     name: string;
     phone_number?: string;
+    uid?: string;
   };
 }
 
 interface ProfileResponse {
+  uid: string;
   id: string;
   email: string;
   name: string;
   phone_number?: string;
-  avatar_url?: string;
+  picture?: string;
 }
 
-/**
- * Função auxiliar genérica para fazer requisições à API.
- */
 async function apiRequest<T>(
   endpoint: string,
   method: string = 'GET',
   body: any = null,
-  // isFormData foi mantido aqui para não quebrar outras chamadas se existirem,
-  // mas se você sabe que nunca usará FormData em outras requisições, pode remover.
   isFormData: boolean = false,
   token?: string
 ): Promise<T> {
   const headers: Record<string, string> = {};
 
-  // Adiciona token de autenticação se fornecido
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  // Só adiciona Content-Type se não for FormData
   if (!isFormData) {
     headers['Content-Type'] = 'application/json';
   }
@@ -64,9 +57,9 @@ async function apiRequest<T>(
 
   if (body) {
     if (isFormData) {
-      config.body = body; // FormData para upload de imagens
+      config.body = body;
     } else {
-      config.body = JSON.stringify(body); // JSON normal
+      config.body = JSON.stringify(body);
     }
   }
 
@@ -123,13 +116,20 @@ export const authService = {
     return apiRequest('/auth/refresh', 'POST', { refreshToken });
   },
 
-  // Função para buscar dados do perfil (incluindo avatar)
   getProfile: async (idToken: string): Promise<ProfileResponse> => {
     return apiRequest<ProfileResponse>('/profile', 'GET', null, false, idToken);
   },
 
-  // Nova função para selecionar avatar padrão (usará a URL do S3)
-  selectDefaultAvatar: async (userId: string, avatarUrl: string, idToken: string) => {
-    return apiRequest('/profile/set-default-avatar', 'POST', { userId, avatarUrl }, false, idToken);
+  updateProfile: async (idToken: string, profileData: { name?: string; email?: string; phone_number?: string; picture?: string; }): Promise<ProfileResponse> => {
+    return apiRequest<ProfileResponse>('/profile', 'PUT', profileData, false, idToken);
+  },
+
+  selectDefaultAvatar: async (avatarId: number, idToken: string): Promise<ProfileResponse> => {
+    const pictureValue = `avatar_${avatarId}`;
+    return apiRequest<ProfileResponse>('/profile', 'PUT', { picture: pictureValue }, false, idToken);
+  },
+
+  deleteAccount: async (idToken: string): Promise<any> => {
+    return apiRequest('/profile/delete-account', 'DELETE', null, false, idToken);
   },
 };

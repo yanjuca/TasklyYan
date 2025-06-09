@@ -130,7 +130,7 @@ export default function App() {
           onPress={handleLogin}
           disabled={isLoading} // <--- DESABILITA O BOTÃO DURANTE O LOADING
         >
-          <Text style={styles.textButtonWhite}>{isLoading ? 'Entrando...' : 'ENTRAR'}</Text>
+          <Text style={styles.textButtonWhite}>{isLoading ? '...' : 'ENTRAR'}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonCriar} onPress={() => navigation.navigate("SingUp")}> {/* Atenção no 'SingUp' vs 'SignUp' */}

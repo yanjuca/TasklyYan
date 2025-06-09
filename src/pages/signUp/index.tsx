@@ -5,15 +5,15 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  ActivityIndicator // Adicionado para o loading do botão
+  ActivityIndicator
 } from "react-native";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Você pode precisar remover isso se não estiver usando-o para armazenamento pós-login imediato.
 import { useNavigation } from "@react-navigation/native";
 
 import { styles } from "./style";
-import ModalBiometrics from "../../components/common/modalBiometrics";
-import { authService } from '../../services/authService';
+import ModalBiometrics from "../../components/common/modalBiometrics"; // Certifique-se que o caminho está correto
+import { authService } from '../../services/authService'; // Certifique-se que o caminho está correto
 
 export default function SingUp() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -35,12 +35,11 @@ export default function SingUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isCPasswordVisible, setIsCPasswordVisible] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false); // Para desabilitar o botão durante a requisição
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
 
   const handleSignUp = async () => {
-    // Resetar erros ao iniciar uma nova tentativa
     setErroNome("");
     setErroEmail("");
     setErroNumero("");
@@ -67,9 +66,7 @@ export default function SingUp() {
     if (password.length < 8) {
       setErroPassword("A senha precisa ter no mínimo 8 caracteres");
       hasError = true;
-    } else if (password.length > 8) { // Se a API for RÍGIDA em 8, mantenha. Se aceita mais, remova.
-      // Seu TextInput tem maxLength={8}. Isso já limita a entrada do usuário.
-      // Se a API aceita senhas maiores, remova o maxLength do TextInput e essa validação.
+    } else if (password.length > 8) {
       setErroPassword("A senha deve ter no máximo 8 caracteres");
       hasError = true;
     }
@@ -81,7 +78,7 @@ export default function SingUp() {
 
     if (hasError) return;
 
-    setIsLoading(true); // ATIVA O LOADING
+    setIsLoading(true);
 
     try {
       const response = await authService.register(
@@ -92,21 +89,30 @@ export default function SingUp() {
       );
 
       console.log('Registro bem-sucedido via API:', response);
-      Alert.alert('Sucesso', 'Conta criada! Agora, selecione seu avatar.');
-
-      if (navigation) {
-        // Navegar para AvatarSelectionScreen passando userId e idToken
-        navigation.navigate("AvatarSelectionScreen" as never, {
-          userId: response.user.id, // Ou response.user.uid, dependendo da sua API Firebase
-          idToken: response.idToken,
-        });
-      }
+      Alert.alert(
+        'Sucesso',
+        'Conta criada! Agora, selecione seu avatar.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              if (navigation) {
+                // CORREÇÃO AQUI: USAR response.uid em vez de response.user.id
+                navigation.navigate("AvatarSelectionScreen" as never, {
+                  userId: response.uid, // O 'uid' está no nível superior da resposta do seu backend
+                  idToken: response.idToken,
+                });
+              }
+            }
+          }
+        ]
+      );
 
     } catch (error: any) {
       console.error('Erro ao registrar na API:', error);
       Alert.alert('Erro no Registro', error.message || 'Ocorreu um erro ao tentar registrar.');
     } finally {
-      setIsLoading(false); // DESATIVA O LOADING SEMPRE
+      setIsLoading(false);
     }
   };
 

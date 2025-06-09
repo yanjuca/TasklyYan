@@ -46,19 +46,19 @@ const styles = StyleSheet.create({
   },
   // ESTILO PARA AVATAR SELECIONADO
   selectedAvatarOutline: {
-    borderWidth: 5, // Aumenta a borda para indicar seleção
+    borderWidth: 1, // Aumenta a borda para indicar seleção
     // A cor da borda já vem de avatar.borderColor
   },
   // ESTILO PARA AVATAR NÃO SELECIONADO (pode adicionar opacidade ou escala, por exemplo)
   deselectedAvatarImage: {
     opacity: 0.7, // Torna avatares não selecionados um pouco mais opacos
-    transform: [{ scale: 0.95 }], // Diminui um pouco os não selecionados
+    transform: [{ scale: 1.1 }], // Diminui um pouco os não selecionados
   },
   confirmButton: {
     backgroundColor: '#5B3CC4', // Cor do seu botão
-    paddingVertical: 15,
+    paddingVertical: 13,
     paddingHorizontal: 30,
-    borderRadius: 25,
+    borderRadius: 8,
     marginTop: 20,
     width: '80%',
     alignItems: 'center',
