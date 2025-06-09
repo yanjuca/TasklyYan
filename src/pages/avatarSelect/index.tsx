@@ -1,35 +1,53 @@
-import { useState } from 'react';
+// src/pages/avatarSelect/index.tsx
+
+import { useState, useEffect } from 'react'; // Adicionar useEffect
 import { View, Text, TouchableOpacity, Image, Alert, ActivityIndicator } from 'react-native';
-import styles from './style'; // Certifique-se de que este é o caminho correto para seus estilos
+import styles from './style';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Importar AsyncStorage
 
-import { S3_CONFIG } from '../../config'; // Importar S3_CONFIG
-import { authService } from '../../services/authService'; // Importar authService
+import { S3_CONFIG } from '../../config';
+import { authService } from '../../services/authService';
 
-// Definir as tipagens para as rotas, se você usa React Navigation.
-// Certifique-se de que 'Tab' é o nome da sua rota para a tela principal (bottom tabs ou similar)
 type RootStackParamList = {
   AvatarSelectionScreen: { userId: string; idToken: string };
-  Tab: undefined; // Ou o tipo correto da sua tela principal
+  Tab: undefined;
 };
 
 type AvatarSelectionScreenRouteProp = RouteProp<RootStackParamList, 'AvatarSelectionScreen'>;
 
 interface Avatar {
   id: number;
-  imageUrl: string; // Agora é uma string (URL do S3)
+  imageUrl: string;
   borderColor: string;
 }
 
 const AvatarSelectionScreen: React.FC = () => {
   const navigation = useNavigation();
   const route = useRoute<AvatarSelectionScreenRouteProp>();
-  const { userId, idToken } = route.params; // Obter userId e idToken dos parâmetros
+  // Não vamos mais usar userId dos params diretamente aqui, mas sim o idToken.
+  // O userId será recuperado via AsyncStorage ou se necessário, o backend pode usar o UID do token.
+  const { idToken } = route.params;
 
   const [selectedAvatarId, setSelectedAvatarId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(false); // Estado de loading
+  const [isLoading, setIsLoading] = useState(false);
+  const [userName, setUserName] = useState<string>(''); // Novo estado para o nome do usuário
+  const [userPhoneNumber, setUserPhoneNumber] = useState<string>(''); // Novo estado para o número do usuário
 
-  // Avatares com URLs completas do S3
+  useEffect(() => {
+    const loadUserData = async () => {
+      try {
+        const storedName = await AsyncStorage.getItem('loggedUserNome');
+        const storedPhoneNumber = await AsyncStorage.getItem('loggedUserNumero');
+        if (storedName) setUserName(storedName);
+        if (storedPhoneNumber) setUserPhoneNumber(storedPhoneNumber);
+      } catch (error) {
+        console.error('Erro ao carregar dados do usuário do AsyncStorage:', error);
+      }
+    };
+    loadUserData();
+  }, []);
+
   const avatars: Avatar[] = [
     { id: 1, imageUrl: `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/avatar_1.png`, borderColor: '#5B3CC4' },
     { id: 2, imageUrl: `${S3_CONFIG.BASE_URL}/${S3_CONFIG.AVATARS_PATH}/avatar_2.png`, borderColor: '#E6E0F7' },
@@ -48,30 +66,33 @@ const AvatarSelectionScreen: React.FC = () => {
       return;
     }
 
-    const selectedAvatar = avatars.find(avatar => avatar.id === selectedAvatarId);
-    if (!selectedAvatar) {
-      Alert.alert("Erro", "Avatar selecionado inválido.");
-      return;
+    // Se o nome ou número não foram carregados, o backend rejeitará.
+    // Você pode adicionar uma validação aqui, ou garantir que esses campos sempre sejam preenchidos no registro.
+    if (!userName || !userPhoneNumber) {
+        Alert.alert("Erro", "Dados do usuário (nome/número) não carregados. Tente novamente.");
+        return;
     }
 
-    setIsLoading(true); // Ativa o loading
+    setIsLoading(true);
 
     try {
       console.log('Enviando avatar para o backend:', {
-        userId: userId,
-        avatarUrl: selectedAvatar.imageUrl,
-        idToken: idToken
+        selectedAvatarId: selectedAvatarId,
+        idToken: idToken,
+        name: userName, // <-- ENVIANDO NOME
+        phone_number: userPhoneNumber // <-- ENVIANDO NÚMERO
       });
-      await authService.selectDefaultAvatar(userId, selectedAvatar.imageUrl, idToken);
+
+      // *** MUDANÇA AQUI: Passar userName e userPhoneNumber ***
+      await authService.selectDefaultAvatar(selectedAvatarId, idToken, userName, userPhoneNumber);
 
       Alert.alert("Sucesso", "Avatar definido com sucesso!");
-      // Navegar para a tela principal, usando 'as never' se a tipagem não estiver configurada globalmente
       navigation.navigate("Tab" as never);
     } catch (error: any) {
       console.error('Erro ao definir avatar na API:', error);
       Alert.alert("Erro", error.message || "Não foi possível definir o avatar.");
     } finally {
-      setIsLoading(false); // Desativa o loading
+      setIsLoading(false);
     }
   };
 
@@ -89,13 +110,13 @@ const AvatarSelectionScreen: React.FC = () => {
             style={[
               styles.avatarButton,
               { borderColor: avatar.borderColor },
-              selectedAvatarId === avatar.id && styles.selectedAvatarOutline // Estilo de borda para selecionado
+              selectedAvatarId === avatar.id && styles.selectedAvatarOutline
             ]}
             onPress={() => handleAvatarPress(avatar.id)}
-            disabled={isLoading} // Desabilita botões de seleção durante o carregamento
+            disabled={isLoading}
           >
             <Image
-              source={{ uri: avatar.imageUrl }} // Carregar imagem do S3
+              source={{ uri: avatar.imageUrl }}
               style={[
                 styles.avatarImage,
                 selectedAvatarId !== avatar.id && styles.deselectedAvatarImage,
@@ -109,7 +130,7 @@ const AvatarSelectionScreen: React.FC = () => {
       <TouchableOpacity
         style={styles.confirmButton}
         onPress={handleConfirmSelection}
-        disabled={isLoading || selectedAvatarId === null} // Desabilita se estiver carregando ou nenhum avatar selecionado
+        disabled={isLoading || selectedAvatarId === null}
       >
         {isLoading ? (
           <ActivityIndicator color="#fff" />

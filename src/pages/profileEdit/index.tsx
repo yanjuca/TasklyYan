@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
-import { useTheme } from '../../pages/preferencesMenu/themeContext'; // Importe o useTheme
-import getStyles from './style'; // Importe a função getStyles
+import { useTheme } from '../../pages/preferencesMenu/themeContext';
+import getStyles from './style';
 import ChevronLeftIcon from '../../assets/icons/ChevronLeft.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { authService } from '../../services/authService';
+
 const ProfileEdit: React.FC = () => {
   const navigation = useNavigation();
-  const { theme } = useTheme(); // Obtenha o tema do contexto
-  const styles = getStyles(theme); // Obtenha os estilos com o tema atual
+  const { theme } = useTheme();
+  const styles = getStyles(theme);
   const [originalEmail, setOriginalEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -36,60 +38,78 @@ const ProfileEdit: React.FC = () => {
   };
 
   const handleContinueButton = async () => {
-    if (isEmailValid(email) && isFullnameValid(fullName) && isPhoneNumberValid(phoneNumber)) {
-      try {
-        const storedUsers = await AsyncStorage.getItem("users");
-        const parsedUsers = storedUsers ? JSON.parse(storedUsers) : [];
-
-        const updatedUsers = parsedUsers.map((user: any) => {
-          if (user.email === originalEmail) {
-            return {
-              ...user,
-              nome: fullName,
-              email: email,
-              numero: phoneNumber,
-            };
-          }
-          return user;
-        });
-
-        await AsyncStorage.setItem("users", JSON.stringify(updatedUsers));
-        await AsyncStorage.setItem("loggedUserNome", fullName);
-        await AsyncStorage.setItem("loggedUserNumero", phoneNumber);
-        await AsyncStorage.setItem("loggedUserEmail", email); // opcional
-
-        console.log("Perfil atualizado com sucesso!");
-        setIsFormValid(true);
-
-        navigation.navigate('avatarEdit', {
-          nomeCompleto: fullName,
-          email: email,
-          numero: phoneNumber,
-        });
-      } catch (error) {
-        console.error("Erro ao atualizar perfil:", error);
-      }
-    } else {
+    if (!isEmailValid(email) || !isFullnameValid(fullName) || !isPhoneNumberValid(phoneNumber)) {
       setIsFormValid(false);
-      console.log('Validação falhou, não salvando.');
+      Alert.alert("Erro de Validação", "Por favor, preencha todos os campos corretamente.");
+      return;
+    }
+
+    setIsFormValid(true);
+
+    try {
+      const idToken = await AsyncStorage.getItem("idToken");
+      if (!idToken) {
+        Alert.alert("Erro", "Sessão expirada. Por favor, faça login novamente.");
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'SingIn' }],
+        });
+        return;
+      }
+
+      const updatedProfileData = {
+        name: fullName,
+        email: email,
+        phone_number: phoneNumber,
+      };
+      await authService.updateProfile(idToken, updatedProfileData);
+
+      await AsyncStorage.setItem("loggedUserNome", fullName);
+      await AsyncStorage.setItem("loggedUserNumero", phoneNumber);
+      await AsyncStorage.setItem("loggedUserEmail", email);
+
+      Alert.alert("Sucesso", "Perfil atualizado com sucesso!");
+      console.log("Perfil atualizado com sucesso!");
+
+      navigation.navigate('avatarEdit' as never, {
+        nomeCompleto: fullName,
+        email: email,
+        numero: phoneNumber,
+      });
+
+    } catch (error: any) {
+      console.error("Erro ao atualizar perfil:", error);
+      Alert.alert("Erro", error.message || "Ocorreu um erro ao atualizar o perfil. Tente novamente.");
     }
   };
 
   useEffect(() => {
     const carregarDadosUsuario = async () => {
-      const emailLogado = await AsyncStorage.getItem("loggedUserEmail");
-      const usuariosArmazenados = await AsyncStorage.getItem("users");
-
-      if (emailLogado && usuariosArmazenados) {
-        const listaUsuarios = JSON.parse(usuariosArmazenados);
-        const usuario = listaUsuarios.find((u: any) => u.email === emailLogado);
-
-        if (usuario) {
-          setFullName(usuario.nome);
-          setEmail(usuario.email);
-          setOriginalEmail(usuario.email); // aqui
-          setPhoneNumber(usuario.numero);
+      try {
+        const idToken = await AsyncStorage.getItem("idToken");
+        if (!idToken) {
+            console.warn("ID Token não encontrado ao carregar dados do perfil.");
+            return;
         }
+
+        const userData = await authService.getProfile(idToken);
+        if (userData) {
+            setFullName(userData.name || '');
+            setEmail(userData.email || '');
+            setOriginalEmail(userData.email || '');
+            setPhoneNumber(userData.phone_number || '');
+        } else {
+            const emailLogado = await AsyncStorage.getItem("loggedUserEmail");
+            const nomeLogado = await AsyncStorage.getItem("loggedUserNome");
+            const numeroLogado = await AsyncStorage.getItem("loggedUserNumero");
+
+            setFullName(nomeLogado || '');
+            setEmail(emailLogado || '');
+            setOriginalEmail(emailLogado || '');
+            setPhoneNumber(numeroLogado || '');
+        }
+      } catch (error) {
+        console.error("Erro ao carregar dados do usuário para edição:", error);
       }
     };
 
@@ -113,8 +133,9 @@ const ProfileEdit: React.FC = () => {
           value={fullName}
           onChangeText={setFullName}
           placeholder="Digite seu nome completo"
+          placeholderTextColor={theme.textSecondary}
         />
-        {(!isFormValid && !isFullnameValid(fullName)) && <Text style={styles.errorText}>Error aqui</Text>}
+        {(!isFormValid && !isFullnameValid(fullName)) && <Text style={styles.errorText}>Nome completo é obrigatório.</Text>}
 
         <Text style={styles.label}>E-mail</Text>
         <TextInput
@@ -123,8 +144,9 @@ const ProfileEdit: React.FC = () => {
           onChangeText={setEmail}
           placeholder="example@example.com"
           keyboardType="email-address"
+          placeholderTextColor={theme.textSecondary}
         />
-        {(!isFormValid && !isEmailValid(email)) && <Text style={styles.errorText}>Error aqui</Text>}
+        {(!isFormValid && !isEmailValid(email)) && <Text style={styles.errorText}>E-mail inválido.</Text>}
 
         <Text style={styles.label}>Número</Text>
         <TextInput
@@ -134,8 +156,9 @@ const ProfileEdit: React.FC = () => {
           placeholder="(DDD) 9 NNNN-NNNN"
           keyboardType="phone-pad"
           maxLength={11}
+          placeholderTextColor={theme.textSecondary}
         />
-        {(!isFormValid && !isPhoneNumberValid(phoneNumber)) && <Text style={styles.errorText}>Error aqui</Text>}
+        {(!isFormValid && !isPhoneNumberValid(phoneNumber)) && <Text style={styles.errorText}>Número de telefone inválido (Ex: 849xxxx-xxxx).</Text>}
       </View>
 
       <TouchableOpacity onPress={handleContinueButton} style={styles.continueButton}>

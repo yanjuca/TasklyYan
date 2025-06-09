@@ -65,7 +65,7 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         color: theme.mainText,
     },
     containerTesk:{
-        width:"100%",
+        width:500,
         marginBottom: 15,
     },
     contentTesk:{
@@ -121,7 +121,8 @@ const createStyles = (theme: ThemeColors) => StyleSheet.create({
         backgroundColor: theme.primary,
         color: theme.primaryLight,
         fontWeight: '400',
-        fontSize:16
+        fontSize:16,
+        textAlign: 'center',
     },
     checkContainer: {
         width: 24,

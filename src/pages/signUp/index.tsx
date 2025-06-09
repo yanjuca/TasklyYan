@@ -5,10 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  ActivityIndicator // Adicionado para o loading do botão
+  ActivityIndicator
 } from "react-native";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'; // Mantenha, vamos usá-lo!
 import { useNavigation } from "@react-navigation/native";
 
 import { styles } from "./style";
@@ -35,12 +35,11 @@ export default function SingUp() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isCPasswordVisible, setIsCPasswordVisible] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false); // Para desabilitar o botão durante a requisição
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigation = useNavigation();
 
   const handleSignUp = async () => {
-    // Resetar erros ao iniciar uma nova tentativa
     setErroNome("");
     setErroEmail("");
     setErroNumero("");
@@ -49,6 +48,7 @@ export default function SingUp() {
 
     let hasError = false;
 
+    // --- Validações ---
     if (nome.trim().split(" ").length < 2) {
       setErroNome("Digite seu nome e sobrenome");
       hasError = true;
@@ -59,18 +59,15 @@ export default function SingUp() {
       hasError = true;
     }
 
-    if (numero.replace(/\D/g, "").length < 11) {
-      setErroNumero("Digite o número com o DDD (mínimo 11 dígitos)");
+    // Apenas dígitos, com 11 caracteres (DDD + 9 + 8 dígitos)
+    if (numero.replace(/\D/g, "").length !== 11) {
+      setErroNumero("Digite o número com o DDD (ex: 849xxxxxxxx)");
       hasError = true;
     }
 
+    // CORREÇÃO: Lógica de validação de senha
     if (password.length < 8) {
       setErroPassword("A senha precisa ter no mínimo 8 caracteres");
-      hasError = true;
-    } else if (password.length > 8) { // Se a API for RÍGIDA em 8, mantenha. Se aceita mais, remova.
-      // Seu TextInput tem maxLength={8}. Isso já limita a entrada do usuário.
-      // Se a API aceita senhas maiores, remova o maxLength do TextInput e essa validação.
-      setErroPassword("A senha deve ter no máximo 8 caracteres");
       hasError = true;
     }
 
@@ -81,32 +78,64 @@ export default function SingUp() {
 
     if (hasError) return;
 
-    setIsLoading(true); // ATIVA O LOADING
+    setIsLoading(true);
 
     try {
-      const response = await authService.register(
+      const registerResponse = await authService.register(
         email,
         password,
         nome,
         numero
       );
 
-      console.log('Registro bem-sucedido via API:', response);
-      Alert.alert('Sucesso', 'Conta criada! Agora, selecione seu avatar.');
+      console.log('Registro bem-sucedido via API:', registerResponse);
 
-      if (navigation) {
-        // Navegar para AvatarSelectionScreen passando userId e idToken
-        navigation.navigate("AvatarSelectionScreen" as never, {
-          userId: response.user.id, // Ou response.user.uid, dependendo da sua API Firebase
-          idToken: response.idToken,
-        });
+      const registeredUserId = registerResponse.uid;
+
+      const loginResponse = await authService.login(email, password);
+      console.log('Login automático bem-sucedido após registro:', loginResponse);
+
+      await AsyncStorage.setItem('idToken', loginResponse.id_token);
+      await AsyncStorage.setItem('refreshToken', loginResponse.refresh_token);
+
+      if (loginResponse.user) {
+        await AsyncStorage.setItem('loggedUserNome', loginResponse.user.name);
+        await AsyncStorage.setItem('loggedUserEmail', loginResponse.user.email);
+        if (loginResponse.user.phone_number) {
+            await AsyncStorage.setItem('loggedUserNumero', loginResponse.user.phone_number);
+        }
+        await AsyncStorage.setItem('loggedUserId', loginResponse.user.id); // Guardar o ID do usuário
+      } else {
+        await AsyncStorage.setItem('loggedUserNome', nome);
+        await AsyncStorage.setItem('loggedUserEmail', email);
+        await AsyncStorage.setItem('loggedUserNumero', numero);
+        await AsyncStorage.setItem('loggedUserId', registeredUserId);
       }
 
+
+      Alert.alert(
+        'Sucesso',
+        'Conta criada e você está logado! Agora, selecione seu avatar.',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              if (navigation) {
+                navigation.replace("AvatarSelectionScreen" as never, {
+                  userId: registeredUserId,
+                  idToken: loginResponse.id_token,
+                });
+              }
+            }
+          }
+        ]
+      );
+
     } catch (error: any) {
-      console.error('Erro ao registrar na API:', error);
-      Alert.alert('Erro no Registro', error.message || 'Ocorreu um erro ao tentar registrar.');
+      console.error('Erro ao registrar ou logar automaticamente:', error);
+      Alert.alert('Erro no Registro/Login', error.message || 'Ocorreu um erro ao tentar criar a conta ou logar automaticamente.');
     } finally {
-      setIsLoading(false); // DESATIVA O LOADING SEMPRE
+      setIsLoading(false);
     }
   };
 
@@ -153,8 +182,11 @@ export default function SingUp() {
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!isPasswordVisible}
-          maxLength={8}
+          maxLength={8} // Mantenha se a senha deve ter EXATAMENTE 8. Se for MÍNIMO 8, remova este maxLength e ajuste a validação.
         />
+        <TouchableOpacity onPress={() => setIsPasswordVisible(!isPasswordVisible)}>
+            <Text>{isPasswordVisible ? "Ocultar senha" : "Ver senha"}</Text>
+        </TouchableOpacity>
         <Text style={styles.txterro}>{erroPassword}</Text>
 
         <Text style={styles.label}>Confirmar Senha</Text>
@@ -164,7 +196,7 @@ export default function SingUp() {
           value={cPassword}
           onChangeText={setCPassword}
           secureTextEntry={!isCPasswordVisible}
-          maxLength={8}
+          maxLength={8} // Mantenha se a senha deve ter EXATAMENTE 8. Se for MÍNIMO 8, remova este maxLength e ajuste a validação.
         />
         <TouchableOpacity onPress={() => setIsCPasswordVisible(!isCPasswordVisible)}>
           <Text>{isCPasswordVisible ? "Ocultar senha" : "Ver senha"}</Text>
